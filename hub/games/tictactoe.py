@@ -54,65 +54,57 @@ def Game(Turn_id,board,m,size,screen,position):
     
     return True
 
-# done with loops for now, iterates through the board to see if there is a horizontal match
-def Horizontal(board,m,n):
+# done with numpy slicing. Iterates through the board to see if there is a horizontal match(by equating it to a full array with elements based on the turn) 
+# gives an array of boolean values (if all elements are True, the arrays are equal and product of the boolean array is non 0(no False)) 
+def Horizontal(Turn_id,board,m,n):
+    compare=np.full((1,n),Turn_id)
     for i in range(0,m):
         for j in range(0,m-n+1):
-                Yes=True
-                for k in range(j,j+n-1):
-                    if board[i][k]!=board[i][k+1] or board[i][k]==0:
-                        Yes=False
-                        break
-                if Yes:
+                a=(board[i][j:j+n:1]==compare)
+                if np.prod(a)!=0:
                     return True
     return False
 
 # iterates through the board to see if there is a vertical match
-def Vertical(board,m,n):
+# similar process - iterates through the board and is compared
+def Vertical(Turn_id,board,m,n):
+    compare=np.full((1,n),Turn_id)
     for i in range(0,m):
         for j in range(0,m-n+1):
-            Yes=True
-            for k in range(j,j+n-1):
-                if board[k][i]!=board[k+1][i] or board[k][i]==0:
-                    Yes=False
-                    break
-            if Yes:
+            a=(board[j:j+n:1,i]==compare)
+            if np.prod(a)!=0:
                 return True
     return False
 
 # iterates through the board to see if there is a right diagonal match(\)
-def Diagonal_right(board,m,n):
+# compares the diagonal of a sub matrix to the full array to see if there is a match
+def Diagonal_right(Turn_id,board,m,n):
+    compare=np.full((1,n),Turn_id)
     for i in range (0,m-n+1):
         for j in range(0,m-n+1):
-            b=i
-            Yes=True
-            for k in range(j,j+n-1):
-                if board[b][k]!=board[b+1][k+1] or board[b][k]==0:
-                    Yes=False
-                    break
-                b+=1
-            if Yes:
+            sub_matr=board[i:i+n,j:j+n]
+            diag=sub_matr.diagonal()
+            a=(diag==compare)
+            if np.prod(a)!=0:
                 return True
     return False
 
 # iterates through the board to see if there is a left diagonal match(/)
-def Diagonal_left(board,m,n):
+# compares the / diagonal of the sub matrix to look for a match
+def Diagonal_left(Turn_id,board,m,n):
+    compare=np.full((1,n),Turn_id)
     for i in range (0,m-n+1):
-        for j in range(n-1,m):
-            b=i
-            Yes=True
-            for k in range(j,j-n+1,-1):
-                if board[b][k]!=board[b+1][k-1] or board[b][k]==0:
-                    Yes=False
-                    break
-                b+=1
-            if Yes:
+        for j in range(0,m-n+1):
+            sub_matr=board[i:i+n,j:j+n]
+            L_diag=np.fliplr(sub_matr).diagonal()
+            a=(L_diag==compare)
+            if np.prod(a)!=0:
                 return True
     return False
 
 # calls 4 functions that each check a line
-def checkWin(board,m,n):
-    if Horizontal(board,m,n) or Vertical(board,m,n) or Diagonal_right(board,m,n) or Diagonal_left(board,m,n):
+def checkWin(Turn_id,board,m,n):
+    if Horizontal(Turn_id,board,m,n) or Vertical(Turn_id,board,m,n) or Diagonal_right(Turn_id,board,m,n) or Diagonal_left(Turn_id,board,m,n):
         return True
     return False
 
@@ -134,8 +126,16 @@ pygame.display.set_caption("Tic Tac Toe")
 
 # Just a welcome message, may find alternative also may add the usernames into the message
 screen.fill((255,192,203))
-pygame.display.flip()
-pygame.display.message_box("Welcome","Tic Tac Toe with 'X' and 'O' ! X starts!","info",None,('OK',),0,None)
+
+for i in range(m):
+    pygame.draw.line(screen,(0,0,0),(0,i*size[1]/m),(size[0],i*size[1]/m),width=1)
+    pygame.draw.line(screen,(0,0,0),(i*size[0]/m,0),(i*size[0]/m,size[1]),width=1)
+
+pygame.draw.line(screen,(0,0,0),(0,size[1]-1),(size[0],size[1]-1),width=1)
+pygame.draw.line(screen,(0,0,0),(size[0]-1,0),(size[0]-1,size[1]),width=1)
+pygame.display.flip() 
+
+pygame.display.message_box("Welcome","Tic Tac Toe with 'X' and 'O' ! X starts! 5 TO WIN!","info",None,('OK',),0,None)
 pygame.display.flip()
 
 # a self defined function that draws the grid on the screen
@@ -181,7 +181,7 @@ while not game_over:
                     game_over=True
 
                 # checks win (5 in a row/column/diagonal)
-                if checkWin(board,m,n):
+                if checkWin(Turn_id,board,m,n):
                     game_over=True
                     if Turn_id==1:
                         win="X"

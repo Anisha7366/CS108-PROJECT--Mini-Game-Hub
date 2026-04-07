@@ -1,209 +1,240 @@
-import numpy as np, pygame, sys
+import pygame,sys,numpy as np
 pygame.init()
 
-# The logic for connect 4 is very similar to tic tac toe, so not much was changed
+# wrapped connect4 in a class - will change it so that it inherits from game.py
 
-# makes the background white(unlike the default black) and makes the grid
-def set_screen(m,screen,size):
-    screen.fill((0,0,0))
+class connect4:
+    # 1. initializing the class object 
 
-    for i in range(m):
-        pygame.draw.line(screen,(255,255,255),(0,i*size[1]/m),(size[0],i*size[1]/m),width=2)
-        pygame.draw.line(screen,(255,255,255),(i*size[0]/m,0),(i*size[0]/m,size[1]),width=2)
+    def __init__(self,Player1,Player2):
 
-    pygame.draw.line(screen,(255,255,255),(0,size[1]-1),(size[0],size[1]-1),width=2)
-    pygame.draw.line(screen,(255,255,255),(size[0]-1,0),(size[0]-1,size[1]),width=2)
-    
-    pygame.display.flip() 
+        # These are the usernames passed as arguments to game.py
+        self.player1,self.player2=Player1,Player2
+        
+        # Initializes turn 1 to player1
+        self.Turn=self.player1
 
-#draws 'X' or 'O' at a desired position- using dimensions I find aesthatically pleasing with the grid
-def update_display(Turn_id,screen,size,m,position):
-    length=(size[0]+size[1])/(4*m)
+        # This is for the actual_game function which uses a while loop
+        self.game_over=False
 
-    if Turn_id==1:
-        pygame.draw.aacircle(screen,(0,255,230),position,length-10)
+        # m = no. of columns in board(=np. of rows), n = the no. to match to win, size = size of pygame window
+        self.m,self.n,self.size=7,4,(700,700)
 
-    else:
-        pygame.draw.aacircle(screen,(238,130,238),position,length-10)
+        # sets the display
+        self.screen=pygame.display.set_mode(self.size)
 
-    pygame.display.flip()
+        # initializes the numpy board
+        self.board=np.zeros((self.m,self.m))
 
-# Makes sure that a full column cannot be filled, rows are a useless check here
-def verify(column,board,m):
-    if board[0][column-1]!=0:
-        pygame.display.message_box("OOPS!","This column is full!","warn",None,('oh no!',),0,None)
+        pygame.display.set_caption("Connect4")
+
+        # just a welcome message
+        self.welcome()
+        
+        # Background design
+        self.set_screen()
+
+        # This is used to check if there is a draw
+        self.move_number=0
+
+    def welcome(self):
+        self.screen.fill((150,50,100))
+
+        # Makes a grid
+        for i in range(self.m):
+            pygame.draw.line(self.screen,(255,255,255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=1)
+
+        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=1)
+        pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
+        pygame.display.flip() 
+
+        # A welcome message
+        pygame.display.message_box("Welcome","Welcome to connect 4 {} and {}! Connect 4 to win! {} starts!".format(self.player1,self.player2,self.player1),"info",None,('OK',),0,None)
+        pygame.display.flip()
+
+    def set_screen(self):
+        self.screen.fill((0,0,0))
+
+        # Makes a grid
+        for i in range(self.m):
+            pygame.draw.line(self.screen,(255,255,255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=2)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=2)
+
+        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=2)
+        pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
+        
+        pygame.display.flip()
+
+    def actual_game(self):
+        while not self.game_over:
+            
+            # Turn_id is used to change the numpy board (every move the respective cell in the grid(which is 0) is replaced with Turn_id)
+            if self.Turn==self.player1:
+                self.Turn_id=1
+            else:
+                self.Turn_id=2
+
+            # Just initializes it at the start - when there is no mouse position
+            mouse_position=(0,0)
+
+            for event in pygame.event.get():
+                
+                # To let the x button be functional and for a clean exit
+                if event.type==pygame.QUIT:
+                    pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
+                    pygame.display.flip()
+                    pygame.quit()
+                    sys.exit()
+
+                # This returns the position of a mouse click - which allows a GUI
+                elif event.type==pygame.MOUSEBUTTONDOWN:
+
+                    # Stores position where the mouse is clicked
+                    mouse_position=event.pos
+
+                    good_game=self.Game(mouse_position)
+                    
+                    # good_game is used to ensure there is no turn switch when an illegal move is performed(say clicking an already full column)
+                    if good_game:
+                        self.move_number+=1
+
+                        # checkwin condition
+                        if self.checkWin():
+                            self.game_over=True                      
+                            pygame.display.message_box("YAY", f"{self.Turn} wins!","info",None,('YAY',),0,None)
+
+                        # checks draw - if no win and all cells are full
+                        elif self.move_number==self.m*self.m:
+                            pygame.display.message_box("WOW","It's a draw!","info",None,('WOW',),0,None)
+                            pygame.display.flip()
+                            self.game_over=True
+                        
+                        # switching players 
+                        self.switch_player()
+
+        #have to change later - don't quit, show stats
+        pygame.quit()
+        sys.exit()
+
+    def Game(self,mouse_position):
+        
+        # mouse position / width of one cell + 1 = column
+        column=(mouse_position[0]*self.m//self.size[0])+1
+
+        # checks if the column picked isn't already full
+        if not self.verify(column):
+            return False
+
+        # returns last empty row in column picked
+        row=self.empty_row(column)+1
+        
+        # cell = center of the cell that this particular row and column correspond to
+        cell=((column*self.size[0]/self.m)-(self.size[0]/(2*self.m)),(row*self.size[1]/self.m)-(self.size[1]/(2*self.m)))
+
+        # Turn_id is useful here
+        self.board[row-1][column-1]=self.Turn_id
+
+        # fills the cell with a disk
+        self.update_display(cell)
+
+        return True
+
+    def verify(self,column):
+        # checks that the column picked is not full, gives error message accordingly
+        if self.board[0][column-1]!=0:
+            pygame.display.message_box("OOPS!",f"{self.Turn}! This column is full!","warn",None,('oh no!',),0,None)
+            pygame.display.flip()
+            return False
+        return True
+
+    def empty_row(self,column):
+        # returns the last empty row in a column (looks bottom to top)
+        for i in range(self.m-1,-1,-1):
+            if self.board[i][column-1]==0:
+                return i
+
+    def update_display(self,cell):
+        # This is the function that draws disks at a column
+        length=(self.size[0]+self.size[1])/(4*self.m)
+
+        if self.Turn_id==1:
+            pygame.draw.aacircle(self.screen,(0,255,230),cell,length-10)
+
+        else:
+            pygame.draw.aacircle(self.screen,(238,130,238),cell,length-10)
+
+        pygame.display.flip()
+
+    def checkWin(self):
+        # checks win 
+        if self.Horizontal() or self.Vertical() or self.Diagonal_right() or self.Diagonal_left():
+            return True
+
         return False
-    return True
 
-# Gives the last empty row index in a column
-def return_empty(column,board,m):
-    for i in range(m-1,-1,-1):
-        if board[i][column-1]==0:
-            return i
-
-def Game(Turn_id,board,m,size,screen,position):
-    # each cell has a side of size[0]/m (size[0]=size[1] as defined by the ps, floor division of position of mouse and side + 1 gives us the column)
-    column=position[0]*m//size[0]+1
-
-    # to make sure no two turns can be on the same cell
-    if not verify(column,board,m):
-        return False
-
-    #Last empty row in the column(put after verify, so it must exist)
-    row=return_empty(column,board,m)+1
-
-    #updates the board, game window at desired cell taking care of whose turn it is
-    if Turn_id==1:
-        board[row-1][column-1]=1
-        update_display(Turn_id,screen,size,m,((column*size[0]/m)-(size[0]/(2*m)),((row)*size[1]/m)-(size[1]/(2*m))))
-    
-    else:
-        board[row-1][column-1]=2
-        update_display(Turn_id,screen,size,m,((column*size[0]/m)-(size[0]/(2*m)),((row)*size[1]/m)-(size[1]/(2*m))))
-
-    return True
-
-# done with numpy slicing. Iterates through the board to see if there is a horizontal match(by equating it to a full array with elements based on the turn) 
-# gives an array of boolean values (if all elements are True, the arrays are equal and product of the boolean array is non 0(no False)) 
-def Horizontal(Turn_id,board,m,n):
-    compare=np.full((1,n),Turn_id)
-    for i in range(0,m):
-        for j in range(0,m-n+1):
-                a=(board[i][j:j+n:1]==compare)
+    def Horizontal(self):
+        # for every row, every consecutive n element array in the row(which is obtained by splicing) is compared to a n element array(all elements are turn_id)
+        # This returns an array of booleans. If they match exactly all elements will be true
+        # if even one element doesn't match, it will be false and hence the product of the array will be 0
+        compare=np.full((1,self.n),self.Turn_id)
+        for i in range(0,self.m):
+            for j in range(0,self.m-self.n+1):
+                a=(self.board[i][j:j+self.n:1]==compare)
                 if np.prod(a)!=0:
                     return True
-    return False
 
-# iterates through the board to see if there is a vertical match
-# similar process - iterates through the board and is compared
-def Vertical(Turn_id,board,m,n):
-    compare=np.full((1,n),Turn_id)
-    for i in range(0,m):
-        for j in range(0,m-n+1):
-            a=(board[j:j+n:1,i]==compare)
-            if np.prod(a)!=0:
-                return True
-    return False
+        return False
 
-# iterates through the board to see if there is a right diagonal match(\)
-def Diagonal_right(Turn_id,board,m,n):
-    compare=np.full((1,n),Turn_id)
-    for i in range (0,m-n+1):
-        for j in range(0,m-n+1):
-            sub_matr=board[i:i+n,j:j+n]
-            diag=sub_matr.diagonal()
-            a=(diag==compare)
-            if np.prod(a)!=0:
-                return True
-    return False
+    def Vertical(self):
+        # similar to check horizontal
+        # for every column, every consecutive n element array is matched and checked
+        # for some reason the splicing gave a horizontal array so i compared it to a horizontal array
+        compare=np.full((1,self.n),self.Turn_id)
+        for i in range(0,self.m):
+            for j in range(0,self.m-self.n+1):
+                a=(self.board[j:j+self.n:1,i]==compare)
+                if np.prod(a)!=0:
+                    return True
+        return False
 
-# iterates through the board to see if there is a left diagonal match(/)
-def Diagonal_left(Turn_id,board,m,n):
-    compare=np.full((1,n),Turn_id)
-    for i in range (0,m-n+1):
-        for j in range(0,m-n+1):
-            sub_matr=board[i:i+n,j:j+n]
-            L_diag=np.fliplr(sub_matr).diagonal()
-            a=(L_diag==compare)
-            if np.prod(a)!=0:
-                return True
-    return False
-
-# calls 4 functions that each check a line
-def checkWin(Turn_id,board,m,n):
-    if Horizontal(Turn_id,board,m,n) or Vertical(Turn_id,board,m,n) or Diagonal_right(Turn_id,board,m,n) or Diagonal_left(Turn_id,board,m,n):
-        return True
-    return False
-
-#main
-Turn="Player1"
-game_over=False
-
-# m is the number of columns in the grid, n is the no. of elements in line for a match, size is the size of the pygame window
-m=7 
-n=4
-size=(700,700)
-
-# initializing the board as a numpy array (all zeroes) and initializing the pygame window
-screen=pygame.display.set_mode(size)
-board=np.zeros((m,m))
-
-# Naming it!
-pygame.display.set_caption("Connect4")
-
-# Just a welcome message, may find alternative also may add the usernames into the message
-screen.fill((150,50,100))
-
-for i in range(m):
-    pygame.draw.line(screen,(255,255,255),(0,i*size[1]/m),(size[0],i*size[1]/m),width=1)
-    pygame.draw.line(screen,(255,255,255),(i*size[0]/m,0),(i*size[0]/m,size[1]),width=1)
-
-pygame.draw.line(screen,(255,255,255),(0,size[1]-1),(size[0],size[1]-1),width=1)
-pygame.draw.line(screen,(255,255,255),(size[0]-1,0),(size[0]-1,size[1]),width=1)
-pygame.display.flip() 
-
-pygame.display.message_box("Welcome","Connect4 with cyan and purple! cyan starts! Connect 4 to win!","info",None,('OK',),0,None)
-pygame.display.flip()
-
-# a self defined function that draws the grid on the screen
-set_screen(m,screen,size)
-
-# parameter used to find if there is a draw('i' would be m*m)
-i=0
-
-while not game_over:
-    # variables that are passed in place of the player names to the function
-    if Turn=="Player1":
-        Turn_id=1
+    def Diagonal_right(self):
+        # this finds every n x n matrix (with consecutive rows and columns) and compares its diagonal to the full array(\)
+        compare=np.full((1,self.n),self.Turn_id)
+        for i in range (0,self.m-self.n+1):
+            for j in range(0,self.m-self.n+1):
+                sub_matr=self.board[i:i+self.n,j:j+self.n]
+                diag=sub_matr.diagonal()
+                a=(diag==compare)
+                if np.prod(a)!=0:
+                    return True
+        return False
     
-    else:
-        Turn_id=2
+    def Diagonal_left(self):
+        # This finds every n x n matrix (with consecutive rows and columns) and compares its alternate diagonal(/) to the full array
+        compare=np.full((1,self.n),self.Turn_id)
+        for i in range (0,self.m-self.n+1):
+            for j in range(0,self.m-self.n+1):
+                sub_matr=self.board[i:i+self.n,j:j+self.n]
+                L_diag=np.fliplr(sub_matr).diagonal()
+                a=(L_diag==compare)
+                if np.prod(a)!=0:
+                    return True
+        return False
 
-    # initializing the mouse click position(to prevent a crash)
-    position=(0,0)
+    def switch_player(self):
+        # switching logic which will be linked to the base class in game.py
+        if self.Turn==self.player1:
+            self.Turn=self.player2
 
-    for event in pygame.event.get():
-        # closes the window if the user closes
-        if event.type==pygame.QUIT:
-            pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
-            pygame.display.flip()
-            pygame.quit()
-            sys.exit()
+        else:
+            self.Turn=self.player1
+           
+# just for initialization, this will be removed
+game=connect4('hehe','haha')
+game.actual_game()
 
-    # Allows user to select the column by clicking their mouse anywhere in the desired column
-        if event.type==pygame.MOUSEBUTTONDOWN:
-            position=event.pos
-
-            good_game=Game(Turn_id,board,m,size,screen,position)
-
-            # function that updates the board and the window
-            # We don't really have the exact same problem here, but this ensures that no repition when someone tries to drop a disc in a already full column
-            if good_game:
-                i+=1
-                # checks for a draw
-                if(i==m*m):
-                    pygame.display.message_box("WOW","It's a draw!","info",None,('WOW',),0,None)
-                    pygame.display.flip()
-                    game_over=True
-
-                # checks win (4 in a row/column/diagonal)
-                if checkWin(Turn_id,board,m,n):
-                    game_over=True
-                    
-                    # Will change to usernames later
-                    if Turn_id==1:
-                        win="CYAN"
-                    else:
-                        win="VIOLET"
-
-                # To switch through turns
-                if Turn=="Player1":
-                    Turn="Player2"
-
-                else:
-                    Turn="Player1"
-
-# quits after the game is over- will change as our project develops
-pygame.display.message_box("YAY",f"{win} wins!","info",None,('YAY',),0,None)
-pygame.quit()
-sys.exit()
+#stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
+#mentioning self in front of everything
+# i forgot to make game function return true
+# made the code better - check win cond then check draw condition

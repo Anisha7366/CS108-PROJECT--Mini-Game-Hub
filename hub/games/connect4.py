@@ -42,15 +42,14 @@ class connect4:
 
         # Makes a grid
         for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=1)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
 
-        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=1)
         pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
         pygame.display.flip() 
 
         # A welcome message
-        pygame.display.message_box("Welcome","Welcome to connect 4 {} and {}! Connect 4 to win! {} starts!".format(self.player1,self.player2,self.player1),"info",None,('OK',),0,None)
+        pygame.display.message_box("Welcome","Welcome to connect 4 {} and {}! Connect 4 to win! {} starts! \nClick anywhere in a column to drop a disk in that column!".format(self.player1,self.player2,self.player1),"info",None,('OK',),0,None)
         pygame.display.flip()
 
     def set_screen(self):
@@ -58,10 +57,9 @@ class connect4:
 
         # Makes a grid
         for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=2)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=2)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
 
-        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=2)
         pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
         
         pygame.display.flip()

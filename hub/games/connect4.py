@@ -1,30 +1,25 @@
-import pygame,sys,numpy as np
+import pygame,sys
 pygame.init()
+
+from games.base_class import base
 
 # wrapped connect4 in a class - will change it so that it inherits from game.py
 
-class connect4:
+class connect4(base):
     # 1. initializing the class object 
 
-    def __init__(self,Player1,Player2):
-
-        # These are the usernames passed as arguments to game.py
-        self.player1,self.player2=Player1,Player2
-        
-        # Initializes turn 1 to player1
-        self.Turn=self.player1
+    # m = no. of columns in board(=np. of rows), n = the no. to match to win, 
+    def __init__(self,player1,player2,size,m,n):
+        super().__init__(player1,player2,m,n)
 
         # This is for the actual_game function which uses a while loop
         self.game_over=False
 
-        # m = no. of columns in board(=np. of rows), n = the no. to match to win, size = size of pygame window
-        self.m,self.n,self.size=7,4,(700,700)
+        # size = size of pygame window
+        self.size=size
 
         # sets the display
         self.screen=pygame.display.set_mode(self.size)
-
-        # initializes the numpy board
-        self.board=np.zeros((self.m,self.m))
 
         pygame.display.set_caption("Connect4")
 
@@ -36,6 +31,9 @@ class connect4:
 
         # This is used to check if there is a draw
         self.move_number=0
+
+        # just for aesthetics
+        self.length=(self.size[0]+self.size[1])/(4*self.m)
 
     def welcome(self):
         self.screen.fill((150,50,100))
@@ -66,12 +64,6 @@ class connect4:
 
     def actual_game(self):
         while not self.game_over:
-            
-            # Turn_id is used to change the numpy board (every move the respective cell in the grid(which is 0) is replaced with Turn_id)
-            if self.Turn==self.player1:
-                self.Turn_id=1
-            else:
-                self.Turn_id=2
 
             # Just initializes it at the start - when there is no mouse position
             mouse_position=(0,0)
@@ -154,84 +146,35 @@ class connect4:
 
     def update_display(self,cell):
         # This is the function that draws disks at a column
-        length=(self.size[0]+self.size[1])/(4*self.m)
 
         if self.Turn_id==1:
-            pygame.draw.aacircle(self.screen,(0,255,230),cell,length-10)
+            pygame.draw.aacircle(self.screen,(0,255,230),cell,self.length-10)
 
         else:
-            pygame.draw.aacircle(self.screen,(238,130,238),cell,length-10)
+            pygame.draw.aacircle(self.screen,(238,130,238),cell,self.length-10)
 
         pygame.display.flip()
 
+    def highlight(self,indices):
+        for pair in indices:
+            row,column=pair[0],pair[1]
+            cell=(self.size[0]/self.m,self.size[1]/self.m)
+            
+            pygame.draw.rect(self.screen,(255,100,0),rect=[cell[0]*column+3,cell[1]*row,cell[0]-5,cell[1]])
+
+            self.update_display((cell[0]*(column+0.5),cell[1]*(row+0.5)))
+
     def checkWin(self):
-        # checks win 
-        if self.Horizontal() or self.Vertical() or self.Diagonal_right() or self.Diagonal_left():
-            return True
-
-        return False
-
-    def Horizontal(self):
-        # for every row, every consecutive n element array in the row(which is obtained by splicing) is compared to a n element array(all elements are turn_id)
-        # This returns an array of booleans. If they match exactly all elements will be true
-        # if even one element doesn't match, it will be false and hence the product of the array will be 0
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range(0,self.m):
-            for j in range(0,self.m-self.n+1):
-                a=(self.board[i][j:j+self.n:1]==compare)
-                if np.prod(a)!=0:
-                    return True
-
-        return False
-
-    def Vertical(self):
-        # similar to check horizontal
-        # for every column, every consecutive n element array is matched and checked
-        # for some reason the splicing gave a horizontal array so i compared it to a horizontal array
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range(0,self.m):
-            for j in range(0,self.m-self.n+1):
-                a=(self.board[j:j+self.n:1,i]==compare)
-                if np.prod(a)!=0:
-                    return True
-        return False
-
-    def Diagonal_right(self):
-        # this finds every n x n matrix (with consecutive rows and columns) and compares its diagonal to the full array(\)
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range (0,self.m-self.n+1):
-            for j in range(0,self.m-self.n+1):
-                sub_matr=self.board[i:i+self.n,j:j+self.n]
-                diag=sub_matr.diagonal()
-                a=(diag==compare)
-                if np.prod(a)!=0:
-                    return True
-        return False
-    
-    def Diagonal_left(self):
-        # This finds every n x n matrix (with consecutive rows and columns) and compares its alternate diagonal(/) to the full array
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range (0,self.m-self.n+1):
-            for j in range(0,self.m-self.n+1):
-                sub_matr=self.board[i:i+self.n,j:j+self.n]
-                L_diag=np.fliplr(sub_matr).diagonal()
-                a=(L_diag==compare)
-                if np.prod(a)!=0:
-                    return True
-        return False
+        indices=[]
+        x=super().checkWin(indices)
+        if(x):
+            self.highlight(indices)
+            pygame.time.delay(1000)
+        return x
 
     def switch_player(self):
-        # switching logic which will be linked to the base class in game.py
-        if self.Turn==self.player1:
-            self.Turn=self.player2
-
-        else:
-            self.Turn=self.player1
-           
-# just for initialization, this will be removed
-game=connect4('hehe','haha')
-game.actual_game()
-
+        super().switch_player()
+              
 #stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
 #mentioning self in front of everything
 # i forgot to make game function return true

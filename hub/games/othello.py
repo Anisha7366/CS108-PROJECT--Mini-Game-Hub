@@ -25,6 +25,7 @@ def set_screen(m,screen,size):
 def update_after_move(screen, board, Turn_id, m, size):
 
     #print(board)
+    length=(size[0]+size[1])/(4*m)
 
     for i,j in np.ndindex(board.shape):
 
@@ -32,6 +33,9 @@ def update_after_move(screen, board, Turn_id, m, size):
             update_display(1, screen, size,m,(j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)))
         elif board[i][j] == 2:
             update_display(2, screen, size,m,(j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)))
+       
+        #else:
+        #    pygame.draw.circle(screen, (10,10,10), (j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)), length-12, width=3)
 
     pygame.display.flip()
 
@@ -59,6 +63,9 @@ def check_if_valid(Turn_id,screen,position,board,m,size):
         v = direction[x][1]
 
         i = 1
+
+        row = int(row)
+        column = int(column)
                 
         while((row-1+i*v<m) and (column-1+i*h<m) and (row-1+i*v>=0) and (column-1+i*h>=0) and board[row+i*v-1][column-1 +i*h] == other):
             i += 1
@@ -144,8 +151,8 @@ def Game(Turn_id,board,m,size,screen,position):
 
 def check_win(board, m):
 
-    print("Entered correct function")
-    print(board)
+    #print("Entered correct function")
+    #print(board)
     
     boolean_matrix = board == 1
     temp = np.full((m, m), -1)
@@ -158,6 +165,27 @@ def check_win(board, m):
         return 2
     else:
         return 0
+    
+
+def valid_move_exist(Turn_id, board, screen, m, size):
+
+    fine = False
+    for i in np.ndindex(board.shape):
+        x = (i[0] + 0.5)*(size[0]/m)
+        y = (i[1] + 0.5)*(size[1]/m)
+
+        length = (size[0]+size[1])/(4*m)
+
+        position = (x,y)
+
+        if(board[i] == 0):
+            if check_if_valid(Turn_id, screen, position, board, m, size) > 0:
+                #pygame.draw.circle(screen, (30, 30, 30), (x, y), length-12, width=3)
+                fine = True
+                
+    pygame.display.flip()  
+        
+    return fine
     
     
 
@@ -226,12 +254,31 @@ while not game_over:
             pygame.display.flip()
             pygame.quit()
             sys.exit()
+
+
+        if valid_move_exist(Turn_id, board, screen, m, size) == False:
+
+            
+
+            pygame.display.message_box("Oh no!", f"{Turn_id} has no valid move! Your move is skipped :(","warn",None,('OK',),0,None)
+
+            if Turn=="Player1":
+                Turn="Player2"
+
+            else:
+                Turn="Player1"
+
+
         
         # Allows user to select the column,row by clicking their mouse at the desired cell
         if event.type==pygame.MOUSEBUTTONDOWN:
             position=event.pos
 
             
+
+
+
+
 
             if(check_if_valid(Turn_id, screen, position, board, m, size) > 0):
 
@@ -243,6 +290,9 @@ while not game_over:
             else:
                 pygame.display.message_box("Error", "Sorry, that is not a valid move :)","warn",None,('OK',),0,None)
                 good_game=False
+
+            #to remove the suggested options circles
+            update_after_move(screen, board, Turn_id, m, size)
 
             # function that updates the board and the window
             #I noticed as the verify function returned false, the turns switched even when the return value was false(so no O printed but the turn now became X) (2 X's in a row) so this is to ensure the turn remained the same

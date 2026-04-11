@@ -1,0 +1,15 @@
+User_1,Result_1,User_2,Result_2,Date,Game_name
+Alice,draw,Anisha,draw,2026-04-11,Connect FOUR
+Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
+Emma,winner,Vimes,loser,2026-04-11,Tic-Tac-Toe
+Emma,draw,Vimes,draw,2026-04-11,Tic-Tac-Toe
+Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
+Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
+Vimes,winner,Anisha,loser,2026-04-11,Tic-Tac-Toe
+Vimes,loser,Anisha,winner,2026-04-11,Connect FOUR
+Vimes,loser,Anisha,winner,2026-04-11,Connect FOUR
+Emma,winner,Alice,loser,2026-04-11,Connect FOUR
+Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
+Anisha,winner,Emma,loser,2026-04-11,Connect FOUR
+Anisha,winner,Emma,loser,2026-04-11,Connect FOUR
+Anisha,winner,Alice,loser,2026-04-11,Tic-Tac-Toe

@@ -1,6 +1,8 @@
 import numpy as np, pygame, sys
 pygame.init()
 
+
+
 # makes the background black and makes the grid and sets four pieces in the center
 def set_screen(m,screen,size):
     #size is the tuple that defines width, height of the screen
@@ -19,9 +21,10 @@ def set_screen(m,screen,size):
     pygame.draw.circle(screen, (255,70,255), (size[0]/2 - length, size[1]/2 + length), length-12)
     pygame.draw.circle(screen, (255,70,255), (size[0]/2 + length, size[1]/2 - length), length-12)
 
-
     pygame.display.flip()
 
+
+#essentially draws the screen anew accounting to the array board, which looks like flipping because the function is called with a time delay
 def update_after_move(screen, board, Turn_id, m, size):
 
     #print(board)
@@ -33,12 +36,13 @@ def update_after_move(screen, board, Turn_id, m, size):
             update_display(1, screen, size,m,(j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)))
         elif board[i][j] == 2:
             update_display(2, screen, size,m,(j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)))
-       
-        #else:
-        #    pygame.draw.circle(screen, (10,10,10), (j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)), length-12, width=3)
-
+        else:
+            pygame.draw.circle(screen,(10,10,10),(j*size[0]/m + size[0]/(2*m), i*size[1]/m + size[1]/(2*m)),length-12, width=3)
+        
     pygame.display.flip()
 
+
+#returns the number of coins flipped if the a move is made at the given position
 def check_if_valid(Turn_id,screen,position,board,m,size):
 
     change = 0
@@ -72,9 +76,10 @@ def check_if_valid(Turn_id,screen,position,board,m,size):
         if (row-1+i*v<m) and (column -1 + i*h < m) and (row-1+i*v>=0) and (column-1+i*h>=0) and (board[row+i*v-1][column-1+i*h] == self) and (i > 1):
             change += i-1
             
-
     return change
 
+
+#updates the array board if the mouse is clicked at a given position, needs to be called only after ensuring a move is valid
 def update_board(Turn_id,screen,position,board,m,size):
 
     copied_board = board.copy()
@@ -111,7 +116,7 @@ def update_board(Turn_id,screen,position,board,m,size):
                 board[row+t*v-1][column-1 +t*h] = self
             
 
-#draws 'X' or 'O' at a desired position- using dimensions i find aesthatically pleasing with the grid
+#draws coins at a desired position- using dimensions i find aesthatically pleasing with the grid
 def update_display(Turn_id,screen,size,m,position):
     length=(size[0]+size[1])/(4*m)
 
@@ -119,8 +124,9 @@ def update_display(Turn_id,screen,size,m,position):
         pygame.draw.circle(screen,(70,255,70),position,length-12)
     else:
         pygame.draw.circle(screen,(255,70,255),position,length-12)
-
+    
     pygame.display.flip()
+
 
 # Makes sure that a used cell cannot be used
 def verify(row,column,board,m):
@@ -129,6 +135,8 @@ def verify(row,column,board,m):
         return False
     return True
 
+
+#updates the screen if a valid move is made and returns error if the board is already filled
 def Game(Turn_id,board,m,size,screen,position):
     # each cell has a side of size[0]/m (size[0]=size[1] as defined by the ps, floor division of position of mouse and side + 1 gives us the column and row)
     row=position[1]*m//size[1]+1
@@ -149,6 +157,8 @@ def Game(Turn_id,board,m,size,screen,position):
     
     return True
 
+
+#counts no of 1s and 2s and 
 def check_win(board, m):
 
     #print("Entered correct function")
@@ -167,12 +177,13 @@ def check_win(board, m):
         return 0
     
 
+#checks if a move can be made in an empty square and if it can, draws a pale circle in that square 
 def valid_move_exist(Turn_id, board, screen, m, size):
 
     fine = False
     for i in np.ndindex(board.shape):
-        x = (i[0] + 0.5)*(size[0]/m)
-        y = (i[1] + 0.5)*(size[1]/m)
+        x = (i[1] + 0.5)*(size[1]/m)
+        y = (i[0] + 0.5)*(size[0]/m)
 
         length = (size[0]+size[1])/(4*m)
 
@@ -180,7 +191,7 @@ def valid_move_exist(Turn_id, board, screen, m, size):
 
         if(board[i] == 0):
             if check_if_valid(Turn_id, screen, position, board, m, size) > 0:
-                #pygame.draw.circle(screen, (30, 30, 30), (x, y), length-12, width=3)
+                pygame.draw.circle(screen, (50, 50, 50), (x, y), length-12, width=3)
                 fine = True
                 
     pygame.display.flip()  
@@ -188,6 +199,14 @@ def valid_move_exist(Turn_id, board, screen, m, size):
     return fine
     
     
+
+
+
+
+
+
+
+
 
 
 
@@ -247,6 +266,8 @@ while not game_over:
     # initializing the mouse click position(to prevent a crash)
     position=(0,0)
 
+    has_move = valid_move_exist(Turn_id, board, screen, m, size)
+
     for event in pygame.event.get():
         # closes the window if the user closes
         if event.type==pygame.QUIT:
@@ -256,9 +277,7 @@ while not game_over:
             sys.exit()
 
 
-        if valid_move_exist(Turn_id, board, screen, m, size) == False:
-
-            
+        if has_move == False:
 
             pygame.display.message_box("Oh no!", f"{Turn_id} has no valid move! Your move is skipped :(","warn",None,('OK',),0,None)
 
@@ -268,16 +287,10 @@ while not game_over:
             else:
                 Turn="Player1"
 
-
         
         # Allows user to select the column,row by clicking their mouse at the desired cell
         if event.type==pygame.MOUSEBUTTONDOWN:
             position=event.pos
-
-            
-
-
-
 
 
             if(check_if_valid(Turn_id, screen, position, board, m, size) > 0):
@@ -316,21 +329,10 @@ while not game_over:
                 else:
                     Turn="Player1"
 
+                
 # quits after the game is over- will change as our project develops
 pygame.display.message_box("YAY",f"{win} wins!","info",None,('YAY',),0,None)
 pygame.quit()
 sys.exit()
 
 
-
-# A challenge faced: the x's repeating - the fix(wrong) sent it to an infinite loop
-
-'''for t in range(1,i):
-board[row+t*v-1][column-1 +t*h] = self
-#r,c is the which'th row and column we need circles to be made
-#x,y are the positions
-r = row + t*v 
-c = column + t*h 
-x = c*size[0]/m - size[0]/(2*m)
-y = r*size[1]/m - size[1]/(2*m)
-update_display(self, screen, size,m,(x,y))'''

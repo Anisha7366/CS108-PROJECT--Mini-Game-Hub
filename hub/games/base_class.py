@@ -43,8 +43,11 @@ class base:
             for j in range(0,self.m-self.n+1):
                 a=(self.board[i][j:j+self.n:1]==compare)
                 if np.prod(a)!=0:
+
+                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
                     for k in range (self.n):
                         indices.append((i,j+k))
+
                     return True
         return False
 
@@ -57,8 +60,11 @@ class base:
             for j in range(0,self.m-self.n+1):
                 a=(self.board[j:j+self.n:1,i]==compare)
                 if np.prod(a)!=0:
+
+                    # This is just returning the indices so i can highlight the screen when a win happens. It does not check for a win condition
                     for k in range (self.n):
                         indices.append((j+k,i))
+
                     return True
         return False
 
@@ -71,8 +77,11 @@ class base:
                 diag=sub_matr.diagonal()
                 a=(diag==compare)
                 if np.prod(a)!=0:
+
+                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
                     for k in range (self.n):
                         indices.append((i+k,j+k))
+
                     return True
         return False
     
@@ -85,8 +94,11 @@ class base:
                 L_diag=np.fliplr(sub_matr).diagonal()
                 a=(L_diag==compare)
                 if np.prod(a)!=0:
+
+                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
                     for k in range (self.n):
                         indices.append((i+k,j+self.n-1-k))
+                        
                     return True
         return False
 

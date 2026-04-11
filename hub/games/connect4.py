@@ -160,7 +160,7 @@ class connect4(base):
             row,column=pair[0],pair[1]
             cell=(self.size[0]/self.m,self.size[1]/self.m)
             
-            pygame.draw.rect(self.screen,(255,100,0),rect=[cell[0]*column+3,cell[1]*row,cell[0]-5,cell[1]])
+            pygame.draw.rect(self.screen,(255,255,255),rect=[cell[0]*column+3,cell[1]*row,cell[0]-4,cell[1]-2])
 
             self.update_display((cell[0]*(column+0.5),cell[1]*(row+0.5)))
 

@@ -43,9 +43,8 @@ add_user() {
     fi
 }
 
-
-
 read -p "Press r for login and n to make a new account: " key
+
 
 while [[ ${key} == 'n' ]]
 do
@@ -64,36 +63,23 @@ do
 done
 
 
-#the works for player 1
 
-#echo ${key}
+#the works for player 1
 
 while [[ ${key} == 'r' ]]
 do
 read -p "Enter username of Player 1: " user1
 read -p "Enter password for ${user1}: " pass1
 
-#read -p "Enter username of Player 2: " user2
-#read -p "Enter password for ${user2}: " pass2 
-
-
 hash1=$(echo -n ${pass1} | sha256sum | awk '{print $1}') 
-
-#echo "The hash for password 1 is: ${hash1}"
-
-#hash2=$(echo -n ${pass2} | sha256sum | awk '{print $1}') 
-
-#echo "The hash for password 2 is: ${hash2}"
-
-#echo ${user1} ${pass1}
-
 
 u1=$(check_user "${user1}")
 p1=$(check_pass "${hash1}" "${user1}") 
 
 if [[ ${p1} == "Match" ]]; then
     echo "Successful!"
-    key=q 
+    player1=${user1}
+    key=z 
 elif [[ ${u1} == "Exists" ]]; then
     read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key
 else 
@@ -102,12 +88,11 @@ fi
 
 if [[ ${key} == n ]]; then
     add_user "${user1}" "${hash1}"
+    echo "Please input username and password again!" 
+    key=r
 fi 
 
 done
-
-
-
 
 #the works for player2
 
@@ -121,23 +106,14 @@ do
 read -p "Enter username of Player 2: " user2
 read -p "Enter password for ${user2}: " pass2 
 
-
-#hash1=$(echo -n ${pass1} | sha256sum | awk '{print $1}') 
-
-#echo "The hash for password 1 is: ${hash1}"
-
 hash2=$(echo -n ${pass2} | sha256sum | awk '{print $1}') 
-
-#echo "The hash for password 2 is: ${hash2}"
-
-#echo ${user1} ${pass1}
-
 
 u2=$(check_user "${user2}")
 p2=$(check_pass "${hash2}" "${user2}") 
 
 if [[ ${p2} == "Match" ]]; then
     echo "Successful!"
+    player2=${user2}
     key2=q 
 elif [[ ${u2} == "Exists" ]]; then
     read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key2
@@ -147,8 +123,11 @@ fi
 
 if [[ ${key2} == n ]]; then
     add_user "${user2}" "${hash2}"
+    echo "Please input username and password again!" 
+    key=r
 fi 
 
 done
 
-#add_user "Sam Vimes" "123" 
+echo "Let the games begin! May the force be with you!"
+python3 game.py ${player1} ${player2}

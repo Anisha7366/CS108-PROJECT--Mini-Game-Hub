@@ -8,7 +8,7 @@ from games.othello import othello
 
 # initializing fonts for text - purely aesthetic
 text_font=pygame.font.SysFont('Serif',50,bold=True,italic=False)
-font2=pygame.font.SysFont('Roman',30,bold=True,italic=False)
+font2=pygame.font.SysFont(None,50,bold=True,italic=False)
 
 # this function is used to print text on the screen
 def draw_text(text,font,text_col,x,y):
@@ -47,8 +47,8 @@ def prompt_to_quit(screen):
     pygame.draw.line(screen,(0,0,0),(0,size[1]/2),(0,size[1]),width=3)
     pygame.draw.line(screen,(0,0,0),(size[0],size[1]/2),(size[0],size[1]),width=3)
 
-    draw_text("Click here to return to the menu and replay!",font2,(255,255,255),size[0]/2,size[1]/4)
-    draw_text("Click here to quit!",font2,(0,0,0),size[0]/2,3*size[1]/4)
+    draw_text("Return to the menu and Replay?",font2,(255,255,255),size[0]/2,size[1]/4)
+    draw_text("Quit?",font2,(0,0,0),size[0]/2,3*size[1]/4)
 
     pygame.display.flip()
 
@@ -95,7 +95,6 @@ def game():
                 
                 # if click is in top 1/3rd-2/3rd of screen, othello is called
                 elif mouse_position[1]<=2*size[1]/3:
-                    
                     play=othello(player1,player2,size,8)
                     return (play.actual_game(),"Othello")
 

@@ -174,7 +174,7 @@ class tictactoe(base):
         x=super().checkWin(indices)
         if(x):
             self.highlight(indices)
-            pygame.time.delay(1500)
+            pygame.time.delay(1000)
         # returns true/ false if win happens or not
         return x
 

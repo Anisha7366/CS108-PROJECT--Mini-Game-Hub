@@ -13,3 +13,23 @@ Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
 Anisha,winner,Emma,loser,2026-04-11,Connect FOUR
 Anisha,winner,Emma,loser,2026-04-11,Connect FOUR
 Anisha,winner,Alice,loser,2026-04-11,Tic-Tac-Toe
+mathss,loser,Anisha,winner,2026-04-11,Tic-Tac-Toe
+mathss,winner,Anisha,loser,2026-04-11,Connect FOUR
+mathss,loser,Anisha,winner,2026-04-11,Connect FOUR
+Anisha,loser,Alice,winner,2026-04-12,Tic-Tac-Toe
+Anisha,winner,Alice,loser,2026-04-12,Connect FOUR
+Emma,loser,Vimes,winner,2026-04-12,Othello
+Emma,winner,Vimes,loser,2026-04-12,Tic-Tac-Toe
+Vimes,loser,Emma,winner,2026-04-12,Tic-Tac-Toe
+Vimes,winner,Emma,loser,2026-04-12,Othello
+spiderman,winner,he,loser,2026-04-12,Connect FOUR
+spiderman,loser,he,winner,2026-04-12,Othello
+spiderman,winner,he,loser,2026-04-12,Othello
+n,winner,q,loser,2026-04-12,Othello
+n,winner,q,loser,2026-04-12,Tic-Tac-Toe
+n,winner,q,loser,2026-04-12,Connect FOUR
+q,winner,n,loser,2026-04-12,Connect FOUR
+Vimes,loser,Emma,winner,2026-04-12,Tic-Tac-Toe
+Vimes,winner,Emma,loser,2026-04-12,Tic-Tac-Toe
+Vimes,loser,Emma,winner,2026-04-12,Othello
+Vimes,winner,Emma,loser,2026-04-12,Connect FOUR

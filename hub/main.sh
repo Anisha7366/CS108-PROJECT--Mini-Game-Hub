@@ -68,29 +68,29 @@ done
 
 while [[ ${key} == 'r' ]]
 do
-read -p "Enter username of Player 1: " user1
-read -p "Enter password for ${user1}: " pass1
+    read -p "Enter username of Player 1: " user1
+    read -p "Enter password for ${user1}: " pass1
 
-hash1=$(echo -n ${pass1} | sha256sum | awk '{print $1}') 
+    hash1=$(echo -n ${pass1} | sha256sum | awk '{print $1}') 
 
-u1=$(check_user "${user1}")
-p1=$(check_pass "${hash1}" "${user1}") 
+    u1=$(check_user "${user1}")
+    p1=$(check_pass "${hash1}" "${user1}") 
 
-if [[ ${p1} == "Match" ]]; then
-    echo "Successful!"
-    player1=${user1}
-    key=z 
-elif [[ ${u1} == "Exists" ]]; then
-    read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key
-else 
-    read -p "No such account exists. Press r to enter again, n to make a new account and q to quit. " key
-fi
+    if [[ ${p1} == "Match" ]]; then
+        echo "Successful!"
+        player1=${user1}
+        key=s 
+    elif [[ ${u1} == "Exists" ]]; then
+        read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key
+    else 
+        read -p "No such account exists. Press r to enter again, n to make a new account and q to quit. " key
+    fi
 
-if [[ ${key} == n ]]; then
-    add_user "${user1}" "${hash1}"
-    echo "Please input username and password again!" 
-    key=r
-fi 
+    if [[ ${key} == n ]]; then
+        add_user "${user1}" "${hash1}"
+        echo "Please input username and password again!" 
+        key=r
+    fi 
 
 done
 
@@ -100,34 +100,46 @@ key2='r'
 
 while [[ ${key2} == 'r' && ${key} != 'q' ]]
 do
-#read -p "Enter username of Player 1: " user1
-#read -p "Enter password for ${user1}: " pass1
+    poe=0
 
-read -p "Enter username of Player 2: " user2
-read -p "Enter password for ${user2}: " pass2 
+    while (( ${poe} == 0 ))
+    do
+        read -p "Enter username of Player 2: " user2
 
-hash2=$(echo -n ${pass2} | sha256sum | awk '{print $1}') 
+        if [[ ${user2} == ${user1} ]]; then
+            echo "${user1} is already logged in! Please try again!"
+        else 
+            poe=1
+        fi
 
-u2=$(check_user "${user2}")
-p2=$(check_pass "${hash2}" "${user2}") 
+    done
 
-if [[ ${p2} == "Match" ]]; then
-    echo "Successful!"
-    player2=${user2}
-    key2=q 
-elif [[ ${u2} == "Exists" ]]; then
-    read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key2
-else 
-    read -p "No such account exists. Press r to enter again, n to make a new account and q to quit. " key2
-fi
+    read -p "Enter password for ${user2}: " pass2 
 
-if [[ ${key2} == n ]]; then
-    add_user "${user2}" "${hash2}"
-    echo "Please input username and password again!" 
-    key=r
-fi 
+    hash2=$(echo -n ${pass2} | sha256sum | awk '{print $1}') 
+
+    u2=$(check_user "${user2}")
+    p2=$(check_pass "${hash2}" "${user2}") 
+
+    if [[ ${p2} == "Match" ]]; then
+        echo "Successful!"
+        player2=${user2}
+        key2=s 
+    elif [[ ${u2} == "Exists" ]]; then
+        read -p "Either username or password are incorrect. Press r to enter again and q to quit. " key2
+    else 
+        read -p "No such account exists. Press r to enter again, n to make a new account and q to quit. " key2
+    fi
+
+    if [[ ${key2} == n ]]; then
+        add_user "${user2}" "${hash2}"
+        echo "Please input username and password again!" 
+        key2=r
+    fi 
 
 done
 
-echo "Let the games begin! May the force be with you!"
-python3 game.py ${player1} ${player2}
+if [[ ${key2} == "s" && ${key} == "s" ]]; then
+    echo "Let the games begin! May the force be with you!"
+    python3 game.py ${player1} ${player2}
+fi

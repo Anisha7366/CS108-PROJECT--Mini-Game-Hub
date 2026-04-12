@@ -1,14 +1,15 @@
 import pygame,sys
 pygame.init()
 
+# inherits the base class from base_class.py
 from games.base_class import base
 
-# wrapped connect4 in a class - will change it so that it inherits from game.py
-
 class connect4(base):
-    # 1. initializing the class object 
+    # some of the initialization is inherited from the parent class like - player names
+    # turn=player1, turn_id=1(used to change numpy board), number of rows/columns in the board
+    # The numpy board initialized as an array of zeroes, each move changes a 0 to a 1 or a 2 based on turn_id  
+    # m= no. of rows/columns , n= no. to match, size= size of pygame screen
 
-    # m = no. of columns in board(=np. of rows), n = the no. to match to win, 
     def __init__(self,player1,player2,size,m,n):
         super().__init__(player1,player2,m,n)
 
@@ -35,21 +36,23 @@ class connect4(base):
         # just for aesthetics
         self.length=(self.size[0]+self.size[1])/(4*self.m)
 
+    # A function purely used for aesthetics
     def welcome(self):
-        self.screen.fill((150,50,100))
+        self.screen.fill((0,255,230))
 
         # Makes a grid
         for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
 
-        pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
+        pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
         pygame.display.flip() 
 
         # A welcome message
         pygame.display.message_box("Welcome","Welcome to connect 4 {} and {}! Connect 4 to win! {} starts! \nClick anywhere in a column to drop a disk in that column!".format(self.player1,self.player2,self.player1),"info",None,('OK',),0,None)
         pygame.display.flip()
 
+    # this function actually builds the grid the game is played on
     def set_screen(self):
         self.screen.fill((0,0,0))
 
@@ -62,6 +65,7 @@ class connect4(base):
         
         pygame.display.flip()
 
+    # actual game function
     def actual_game(self):
         while not self.game_over:
 
@@ -93,20 +97,18 @@ class connect4(base):
                         if self.checkWin():
                             self.game_over=True                      
                             pygame.display.message_box("YAY", f"{self.Turn} wins!","info",None,('YAY',),0,None)
+                            return self.Turn
 
                         # checks draw - if no win and all cells are full
                         elif self.move_number==self.m*self.m:
                             pygame.display.message_box("WOW","It's a draw!","info",None,('WOW',),0,None)
-                            pygame.display.flip()
                             self.game_over=True
+                            return "DRAW"
                         
                         # switching players 
                         self.switch_player()
 
-        #have to change later - don't quit, show stats
-        pygame.quit()
-        sys.exit()
-
+    # changes the board, draws circles on the screen
     def Game(self,mouse_position):
         
         # mouse position / width of one cell + 1 = column
@@ -130,6 +132,7 @@ class connect4(base):
 
         return True
 
+    # checks if the column picked isn't already full
     def verify(self,column):
         # checks that the column picked is not full, gives error message accordingly
         if self.board[0][column-1]!=0:
@@ -138,23 +141,26 @@ class connect4(base):
             return False
         return True
 
+    # gives the row that's to be filled
     def empty_row(self,column):
         # returns the last empty row in a column (looks bottom to top)
         for i in range(self.m-1,-1,-1):
             if self.board[i][column-1]==0:
                 return i
 
+    # this is the function Game() calls to draw disks
     def update_display(self,cell):
         # This is the function that draws disks at a column
 
         if self.Turn_id==1:
-            pygame.draw.aacircle(self.screen,(0,255,230),cell,self.length-10)
+            pygame.draw.aacircle(self.screen,(255,105,180),cell,self.length-10)
 
         else:
-            pygame.draw.aacircle(self.screen,(238,130,238),cell,self.length-10)
+            pygame.draw.aacircle(self.screen,(191,0,255),cell,self.length-10)
 
         pygame.display.flip()
 
+    # It points it out if a match of 4 has been made by highlighting it
     def highlight(self,indices):
         for pair in indices:
             row,column=pair[0],pair[1]
@@ -164,14 +170,20 @@ class connect4(base):
 
             self.update_display((cell[0]*(column+0.5),cell[1]*(row+0.5)))
 
+    # checkwin is inherited from the parent class, this waits for 1.5 s so that the players can wait and see the win happening
     def checkWin(self):
+        # indices are returned from the parent checkwin function - about row, column in the board where a match occurs
+        # now colour of cells with these rows, columns can be changed - to highlight them
+        # purely aesthetic
         indices=[]
         x=super().checkWin(indices)
         if(x):
             self.highlight(indices)
-            pygame.time.delay(1000)
+            pygame.time.delay(1500)
+        # returns true/ false if win happens or not
         return x
 
+    # switch player inherited from parent class
     def switch_player(self):
         super().switch_player()
               

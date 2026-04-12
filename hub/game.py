@@ -4,6 +4,7 @@ pygame.init()
 # import the respective classes from games
 from games.connect4 import connect4
 from games.tictactoe import tictactoe
+from games.othello import othello 
 
 # initializing fonts for text - purely aesthetic
 text_font=pygame.font.SysFont('Serif',50,bold=True,italic=False)
@@ -94,9 +95,9 @@ def game():
                 
                 # if click is in top 1/3rd-2/3rd of screen, othello is called
                 elif mouse_position[1]<=2*size[1]/3:
-                    pass
-                #     play=tictactoe(player1,player2,size,8)
-                #     return (play.actual_game(),"Othello")
+                    
+                    play=othello(player1,player2,size,8)
+                    return (play.actual_game(),"Othello")
 
                 # if click is in bottom 1/3rd of screen, connect4 is called
                 else:

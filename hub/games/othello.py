@@ -44,7 +44,7 @@ class othello(base):
         pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
         pygame.display.flip() 
 
-        pygame.display.message_box("Welcome",f"The player who has the largest number of coins on board wins! {self.player1} goes first!","info",None,('OK',),0,None)
+        pygame.display.message_box("Welcome",f"The player who has the largest number of coins on board wins! {self.player1}(blue) goes first!","info",None,('OK',),0,None)
         pygame.display.flip()
 
     
@@ -169,14 +169,13 @@ class othello(base):
                         else:
                             self.Turn=self.player1
 
-                        
-        # quits after the game is over- will change as our project develops
-        pygame.display.message_box("YAY",f"{self.Turn} wins!","info",None,('YAY',),0,None)
         #pygame.quit()
         
         if (win == 1):
+            pygame.display.message_box("YAY",f"{self.player1}(blue) wins!","info",None,('YAY',),0,None)
             return self.player1 
         else:
+            pygame.display.message_box("YAY",f"{self.player2}(purple) wins!","info",None,('YAY',),0,None)
             return self.player2
       
 

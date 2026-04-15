@@ -41,3 +41,33 @@ spiderman,loser,n,winner,2026-04-12,Othello
 spiderman,draw,katniss,draw,2026-04-12,Othello
 spiderman,winner,katniss,loser,2026-04-12,Othello
 peeta,loser,katniss,winner,2026-04-12,Othello
+katniss,winner,spiderman,loser,2026-04-14,Connect FOUR
+katniss,loser,spiderman,winner,2026-04-14,Connect FOUR
+katniss,draw,spiderman,draw,2026-04-14,Connect FOUR
+katniss,draw,spiderman,draw,2026-04-14,Tic-Tac-Toe
+katniss,winner,spiderman,loser,2026-04-14,Othello
+Alice,winner,Anisha,loser,2026-04-15,Tic-Tac-Toe
+Alice,winner,Anisha,loser,2026-04-15,Tic-Tac-Toe
+katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
+peeta,winner,katniss,loser,2026-04-15,Tic-Tac-Toe
+peeta,winner,katniss,loser,2026-04-15,Tic-Tac-Toe
+Emma,winner,Vimes,loser,2026-04-15,Connect FOUR
+katniss,loser,peeta,winner,2026-04-15,Connect FOUR
+n,winner,q,loser,2026-04-15,Connect FOUR
+n,loser,q,winner,2026-04-15,Othello
+n,winner,q,loser,2026-04-15,Othello
+n,winner,q,loser,2026-04-15,Tic-Tac-Toe
+katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
+katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
+katniss,loser,peeta,winner,2026-04-15,Othello
+katniss,winner,peeta,loser,2026-04-15,Connect FOUR
+katniss,loser,peeta,winner,2026-04-15,Connect FOUR
+katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
+Emma,winner,Vimes,loser,2026-04-15,Othello
+Emma,winner,q,loser,2026-04-15,Connect FOUR
+q,winner,n,loser,2026-04-15,Tic-Tac-Toe
+Emma,winner,Vimes,loser,2026-04-15,Tic-Tac-Toe
+Emma,winner,Vimes,loser,2026-04-15,Tic-Tac-Toe
+Emma,draw,Vimes,draw,2026-04-15,Othello
+Emma,winner,Vimes,loser,2026-04-15,Connect FOUR
+n,winner,q,loser,2026-04-15,Connect FOUR

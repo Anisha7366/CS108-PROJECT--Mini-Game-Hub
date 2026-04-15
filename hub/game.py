@@ -8,7 +8,8 @@ from games.othello import othello
 
 # initializing fonts for text - purely aesthetic
 text_font=pygame.font.SysFont('Serif',50,bold=True,italic=False)
-font2=pygame.font.SysFont(None,50,bold=True,italic=False)
+font2=pygame.font.SysFont(None,45,bold=True,italic=False)
+font3=pygame.font.SysFont(None,30,bold=True,italic=False)
 
 # this function is used to print text on the screen
 def draw_text(text,font,text_col,x,y):
@@ -21,17 +22,19 @@ def menu(screen):
     pygame.draw.rect(screen,(255,192,203),rect=[0,0,size[0],size[1]/3])
     pygame.draw.rect(screen,(238,130,238),rect=[0,size[1]/3,size[0],size[1]/3])
     pygame.draw.rect(screen,(0,255,230),rect=[0,2*size[1]/3,size[0],size[1]/3])
+    pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
 
-    pygame.draw.line(screen,(0,0,0),(0,0),(size[0],0),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]/3),(size[0],size[1]/3),width=2)
-    pygame.draw.line(screen,(0,0,0),(0,2*size[1]/3),(size[0],2*size[1]/3),width=2)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,0),(0,size[1]),width=3)
-    pygame.draw.line(screen,(0,0,0),(size[0],0),(size[0],size[1]),width=3)
+    pygame.draw.line(screen,(0,0,0),(0,0),(size[0],0),width=5)
+    pygame.draw.line(screen,(0,0,0),(0,size[1]/3),(size[0],size[1]/3),width=3)
+    pygame.draw.line(screen,(0,0,0),(0,2*size[1]/3),(size[0],2*size[1]/3),width=3)
+    pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=5)
+    pygame.draw.line(screen,(0,0,0),(0,0),(0,size[1]),width=5)
+    pygame.draw.line(screen,(0,0,0),(size[0]-1,0),(size[0]-1,size[1]),width=3)
 
     draw_text("Tic-Tac-Toe!",text_font,(0,0,0),size[0]/2,size[1]/6)
     draw_text("OTHELLO!",text_font,(0,0,0),size[0]/2,size[1]/2)
     draw_text("Connect FOUR!",text_font,(0,0,0),size[0]/2,5*size[1]/6)
+    draw_text("Welcome! To pick a game, click anywhere in its box!",font3,(255,255,255),size[0]/2,size[1]+25)
 
     pygame.display.flip()
 
@@ -39,6 +42,7 @@ def menu(screen):
 def prompt_to_quit(screen):
     pygame.draw.rect(screen,(0,0,0),rect=[0,0,size[0],size[1]/2])
     pygame.draw.rect(screen,(255,255,255),rect=[0,size[1]/2,size[0],size[1]/2])
+    pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
 
     pygame.draw.line(screen,(255,255,255),(0,0),(size[0],0),width=3)
     pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=3)
@@ -49,6 +53,7 @@ def prompt_to_quit(screen):
 
     draw_text("Return to the menu and Replay?",font2,(255,255,255),size[0]/2,size[1]/4)
     draw_text("Quit?",font2,(0,0,0),size[0]/2,3*size[1]/4)
+    draw_text("To pick a choice, click anywhere in its box!",font3,(255,255,255),size[0]/2,size[1]+25)
 
     pygame.display.flip()
 
@@ -56,11 +61,10 @@ def prompt_to_quit(screen):
 player1,player2=sys.argv[1],sys.argv[2]
 
 # size according to taste
-size=(700,700)
-
+size=(650,650)
 
 # sets the display
-screen=pygame.display.set_mode(size)
+screen=pygame.display.set_mode((size[0],size[1]+50))
 pygame.display.set_caption("May the odds be ever in your favor!")
 
 # This is the function that calls the menu and sets it up, according to choice calls the game and plays it
@@ -150,7 +154,7 @@ while True:
                     play_game_and_append()
 
                 # if not, quit the game   
-                else:
+                elif mouse_position[1]<=size[1]:
                     pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
                     pygame.display.flip()
                     pygame.quit()

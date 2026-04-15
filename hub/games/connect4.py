@@ -20,9 +20,11 @@ class connect4(base):
         self.size=size
 
         # sets the display
-        self.screen=pygame.display.set_mode(self.size)
+        self.screen=pygame.display.set_mode((self.size[0],self.size[1]+50))
 
         pygame.display.set_caption("Connect4")
+
+        self.font=pygame.font.SysFont(None,30,bold=True,italic=False)
 
         # just a welcome message
         self.welcome()
@@ -36,16 +38,25 @@ class connect4(base):
         # just for aesthetics
         self.length=(self.size[0]+self.size[1])/(4*self.m)
 
+        # Shows whose turn it is at the bottom
+
+        self.draw_text(f"{self.player1}(pink)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+        pygame.display.flip()
+
     # A function purely used for aesthetics
     def welcome(self):
         self.screen.fill((0,255,230))
 
         # Makes a grid
         for i in range(self.m):
-            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
-            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]-4),width=1)
+            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]-4),width=1)
 
-        pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
+        pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]-4),width=1)
+
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1]-3,self.size[0],53])
+        self.draw_text(f"CONNECT 4",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+
         pygame.display.flip() 
 
         # A welcome message
@@ -58,11 +69,12 @@ class connect4(base):
 
         # Makes a grid
         for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]),width=1)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]-4),width=1)
+            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]-4),width=1)
 
-        pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
-        
+        pygame.draw.line(self.screen,(255,255,255),(self.size[0],0),(self.size[0],self.size[1]-4),width=2)
+        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-4),(self.size[0]-1,self.size[1]-4),width=1)
+
         pygame.display.flip()
 
     # actual game function
@@ -186,6 +198,20 @@ class connect4(base):
     # switch player inherited from parent class
     def switch_player(self):
         super().switch_player()
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+
+        if self.Turn==self.player1:
+            self.draw_text(f"{self.player1}(Pink)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+        
+        else:
+            self.draw_text(f"{self.player2}(Purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+        pygame.display.flip()
+    
+    # this function is used to print text on the screen
+    def draw_text(self,text,font,text_col,x,y):
+        img=font.render(text,True,text_col)
+        width,height=img.get_size()
+        self.screen.blit(img,(x-width/2,y-height/2))
               
 #stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
 #mentioning self in front of everything

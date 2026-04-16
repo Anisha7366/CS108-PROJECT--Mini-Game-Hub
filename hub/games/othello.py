@@ -63,11 +63,11 @@ class othello(base):
     def set_screen(self):
     #size is the tuple that defines width, height of the screen
         
-        self.screen.fill((10,10,10))   #this is the RGB that turns the screen black-ish
+        self.screen.fill((0,0,0))   #this is the RGB that turns the screen black
 
         for i in range(self.m):
-            pygame.draw.line(self.screen,(220,220,220),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=2)  
-            pygame.draw.line(self.screen,(220,220,220),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=2) 
+            pygame.draw.line(self.screen,(255, 255, 255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=2)  
+            pygame.draw.line(self.screen,(255, 255, 255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=2) 
 
         pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=2)
         pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
@@ -78,7 +78,7 @@ class othello(base):
         pygame.draw.circle(self.screen, (255,51,255), (self.size[0]/2 - length, self.size[1]/2 + length), length-12)
         pygame.draw.circle(self.screen, (255,51,255), (self.size[0]/2 + length, self.size[1]/2 - length), length-12)
 
-        pygame.draw.rect(self.screen,(10,10,10),rect=[0,self.size[1],self.size[0],50])
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
 
         pygame.display.flip()
 
@@ -120,13 +120,28 @@ class othello(base):
 
                 if has_move == False:
 
-                    pygame.display.message_box("Oh no!", f"{self.Turn} has no valid move! Your move is skipped :(","warn",None,('OK',),0,None)
+                    if self.valid_move_exist(position, ((self.Turn_id)%2 + 1)) == False:
+                        if self.checkWin() == 1:
+                            pygame.display.message_box("Bye Bye",f"Neither players can make any moves! Game ends and {self.player1} wins!","info",None,('OK',),0,None)
 
-                    if self.Turn==self.player1:
-                        self.Turn=self.player2
+                        elif self.checkWin() == 2:
+                            pygame.display.message_box("Bye Bye",f"Neither players can make any moves! Game ends and {self.player2} wins!","info",None,('OK',),0,None)
+                        else:
+                            pygame.display.message_box("Bye Bye",f"Neither players can make any moves! Game ends and it's a draw!","info",None,('OK',),0,None)
+
+
+                        self.game_over = True
 
                     else:
-                        self.Turn=self.player1
+
+
+                        pygame.display.message_box("Oh no!", f"{self.Turn} has no valid move! Your move is skipped :(","warn",None,('OK',),0,None)
+
+                        if self.Turn==self.player1:
+                            self.Turn=self.player2
+
+                        else:
+                            self.Turn=self.player1
 
                 
                 # Allows user to select the column,row by clicking their mouse at the desired cell
@@ -164,13 +179,16 @@ class othello(base):
                                 pygame.display.flip()
                                 
                                 return "draw"
+                            
+                            if (win == 1):
+                                pygame.display.message_box("YAY",f"{self.player1}(blue) wins!","info",None,('YAY',),0,None)
+                                return self.player1 
+                            else:
+                                pygame.display.message_box("YAY",f"{self.player2}(purple) wins!","info",None,('YAY',),0,None)
+                                return self.player2
                                 
 
-                            elif(win == 1):
-                                win_color = "Blue"
-
-                            else:
-                                win_color = "Purple"
+                            
 
                         
 
@@ -184,12 +202,7 @@ class othello(base):
 
         #pygame.quit()
         
-        if (win == 1):
-            pygame.display.message_box("YAY",f"{self.player1}(blue) wins!","info",None,('YAY',),0,None)
-            return self.player1 
-        else:
-            pygame.display.message_box("YAY",f"{self.player2}(purple) wins!","info",None,('YAY',),0,None)
-            return self.player2
+        
       
 
     def valid_move_exist(self, position, Turn_id):
@@ -333,7 +346,7 @@ class othello(base):
             elif self.board[i][j] == 2:
                 self.update_display(2,(j*self.size[0]/self.m + self.size[0]/(2*self.m), i*self.size[1]/self.m + self.size[1]/(2*self.m)))
             else:
-                pygame.draw.circle(self.screen,(10,10,10),(j*self.size[0]/self.m + self.size[0]/(2*self.m), i*self.size[1]/self.m + self.size[1]/(2*self.m)),self.length-12, width=3)
+                pygame.draw.circle(self.screen,(0,0,0),(j*self.size[0]/self.m + self.size[0]/(2*self.m), i*self.size[1]/self.m + self.size[1]/(2*self.m)),self.length-12, width=3)
             
         pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
 
@@ -351,11 +364,15 @@ class othello(base):
         #print("Entered correct function")
         #print(board)
         
-        boolean_matrix = self.board == 1
+        boolean_matrix_1 = self.board == 1
         temp = np.full((self.m, self.m), -1)
-        points1 = temp[boolean_matrix].flatten().size
-        points2 = self.m*self.m - points1
+        points1 = temp[boolean_matrix_1].flatten().size
 
+        boolean_matrix_2 = self.board == 2
+        temp = np.full((self.m, self.m), -1)
+        points2 = temp[boolean_matrix_2].flatten().size
+
+        
         if points1 > points2:
             return 1
         elif points2 > points1:

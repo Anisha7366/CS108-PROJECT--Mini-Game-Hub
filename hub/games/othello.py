@@ -156,6 +156,7 @@ class othello(base):
 
                         pygame.time.delay(250)
                         self.update_after_move()
+                        
                     else:
                         pygame.display.message_box("Error", "Sorry, that is not a valid move :)","warn",None,('OK',),0,None)
                         good_game=False
@@ -163,9 +164,22 @@ class othello(base):
                     #to remove the suggested options circles
                     self.update_after_move()
 
+                
+
                     # function that updates the board and the window
                     #I noticed as the verify function returned false, the turns switched even when the return value was false(so no O printed but the turn now became X) (2 X's in a row) so this is to ensure the turn remained the same
                     if good_game:
+                        
+                        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+
+                        if self.Turn==self.player2:
+                            self.draw_text(f"{self.player1}(blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+                        
+                        else:
+                            self.draw_text(f"{self.player2}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+
+                        pygame.display.flip()
+
                         self.move_number+=1
                         #print(i)
 
@@ -194,6 +208,7 @@ class othello(base):
 
 
                         # To switch through turns
+                        
                         if self.Turn==self.player1:
                             self.Turn=self.player2
 
@@ -351,12 +366,15 @@ class othello(base):
         pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
 
         if self.Turn==self.player2:
-            self.draw_text(f"{self.player1}(blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-        
-        else:
             self.draw_text(f"{self.player2}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+                        
+        else:
+            self.draw_text(f"{self.player1}(blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+
 
         pygame.display.flip()
+
+        
 
     #counts no of 1s and 2s and 
     def checkWin(self):

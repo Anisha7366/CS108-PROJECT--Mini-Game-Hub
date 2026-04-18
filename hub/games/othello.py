@@ -1,3 +1,5 @@
+#works fine but put no possible moves part outside of the events loop
+
 import numpy as np, pygame, sys
 pygame.init()
 
@@ -152,7 +154,9 @@ class othello(base):
                     if(self.check_if_valid(position, self.Turn_id) > 0):
 
                         good_game=self.Game(position, self.Turn_id)
-                        self.update_board(self.Turn_id, position)
+
+                        if good_game:
+                            self.update_board(self.Turn_id, position)
 
                         pygame.time.delay(250)
                         self.update_after_move()
@@ -224,8 +228,8 @@ class othello(base):
 
         fine = False
         for i in np.ndindex(self.board.shape):
-            x = (i[1] + 0.5)*(self.size[1]/self.m)
-            y = (i[0] + 0.5)*(self.size[0]/self.m)
+            x = (i[1] + 0.5)*(self.size[0]/self.m)
+            y = (i[0] + 0.5)*(self.size[1]/self.m)
 
 
             position = (x,y)

@@ -1,4 +1,3 @@
-User_1,Result_1,User_2,Result_2,Date,Game_name
 Alice,draw,Anisha,draw,2026-04-11,Connect FOUR
 Emma,winner,Vimes,loser,2026-04-11,Connect FOUR
 Emma,winner,Vimes,loser,2026-04-11,Tic-Tac-Toe
@@ -25,18 +24,11 @@ Vimes,winner,Emma,loser,2026-04-12,Othello
 spiderman,winner,he,loser,2026-04-12,Connect FOUR
 spiderman,loser,he,winner,2026-04-12,Othello
 spiderman,winner,he,loser,2026-04-12,Othello
-n,winner,q,loser,2026-04-12,Othello
-n,winner,q,loser,2026-04-12,Tic-Tac-Toe
-n,winner,q,loser,2026-04-12,Connect FOUR
-q,winner,n,loser,2026-04-12,Connect FOUR
 Vimes,loser,Emma,winner,2026-04-12,Tic-Tac-Toe
 Vimes,winner,Emma,loser,2026-04-12,Tic-Tac-Toe
 Vimes,loser,Emma,winner,2026-04-12,Othello
 Vimes,winner,Emma,loser,2026-04-12,Connect FOUR
 mehak,winner,Anisha,loser,2026-04-12,Othello
-n,winner,q,loser,2026-04-12,Connect FOUR
-n,winner,q,loser,2026-04-12,Tic-Tac-Toe
-n,loser,q,winner,2026-04-12,Othello
 spiderman,loser,n,winner,2026-04-12,Othello
 spiderman,draw,katniss,draw,2026-04-12,Othello
 spiderman,winner,katniss,loser,2026-04-12,Othello
@@ -53,10 +45,6 @@ peeta,winner,katniss,loser,2026-04-15,Tic-Tac-Toe
 peeta,winner,katniss,loser,2026-04-15,Tic-Tac-Toe
 Emma,winner,Vimes,loser,2026-04-15,Connect FOUR
 katniss,loser,peeta,winner,2026-04-15,Connect FOUR
-n,winner,q,loser,2026-04-15,Connect FOUR
-n,loser,q,winner,2026-04-15,Othello
-n,winner,q,loser,2026-04-15,Othello
-n,winner,q,loser,2026-04-15,Tic-Tac-Toe
 katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
 katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
 katniss,loser,peeta,winner,2026-04-15,Othello
@@ -65,9 +53,11 @@ katniss,loser,peeta,winner,2026-04-15,Connect FOUR
 katniss,winner,peeta,loser,2026-04-15,Tic-Tac-Toe
 Emma,winner,Vimes,loser,2026-04-15,Othello
 Emma,winner,q,loser,2026-04-15,Connect FOUR
-q,winner,n,loser,2026-04-15,Tic-Tac-Toe
 Emma,winner,Vimes,loser,2026-04-15,Tic-Tac-Toe
 Emma,winner,Vimes,loser,2026-04-15,Tic-Tac-Toe
 Emma,draw,Vimes,draw,2026-04-15,Othello
 Emma,winner,Vimes,loser,2026-04-15,Connect FOUR
-n,winner,q,loser,2026-04-15,Connect FOUR
+Emma,loser,Vimes,winner,2026-04-18,Tic-Tac-Toe
+Emma,loser,Vimes,winner,2026-04-18,Tic-Tac-Toe
+Emma,winner,Alice,loser,2026-04-18,Tic-Tac-Toe
+Emma,winner,Alice,loser,2026-04-18,Connect FOUR

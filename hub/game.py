@@ -1,163 +1,146 @@
-import pygame,sys,csv,datetime
+# pygame for the GUI, sys for a clean exit
+# datetime to append to history.csv, numpy for few general array operations, matplotlib for plotting the stats
+import pygame,sys
+
+# initializes the pygame window
 pygame.init()
 
-# import the respective classes from games
+# import the respective classes from games - connect4, tictactoe, othello
 from games.connect4 import connect4
 from games.tictactoe import tictactoe
-from games.othello import othello 
+from games.othello import othello
 
-# initializing fonts for text - purely aesthetic
-text_font=pygame.font.SysFont('Serif',50,bold=True,italic=False)
-font2=pygame.font.SysFont(None,45,bold=True,italic=False)
-font3=pygame.font.SysFont(None,30,bold=True,italic=False)
+# Everything that is drawn on the pygame window from this file(except for the actual gameplay)- menu's,charts is done through functions in the screens class
+# There was a lot of such designing, so for the modularity of the code i made a seperate python file
+from screen_interfaces import screens
 
-# this function is used to print text on the screen
-def draw_text(text,font,text_col,x,y):
-      img=font.render(text,True,text_col)
-      width,height=img.get_size()
-      screen.blit(img,(x-width/2,y-height/2))
+# plot is a class that takes care of plotting the stats(makes arrays from data stored in history.csv), saving the plots as pictures which the screens class can load on the pygame window 
+# this portion of the code was 100+ lines too so i put it in a seperate file as a class
+from matplotlib_plots import plot
 
-# This acts as our menu where someboy can pick tictactoe,othello,connect3 by clicking anywhere in their respective boxes
-def menu(screen):
-    pygame.draw.rect(screen,(255,192,203),rect=[0,0,size[0],size[1]/3])
-    pygame.draw.rect(screen,(238,130,238),rect=[0,size[1]/3,size[0],size[1]/3])
-    pygame.draw.rect(screen,(0,255,230),rect=[0,2*size[1]/3,size[0],size[1]/3])
-    pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
-
-    pygame.draw.line(screen,(0,0,0),(0,0),(size[0],0),width=5)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]/3),(size[0],size[1]/3),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,2*size[1]/3),(size[0],2*size[1]/3),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=5)
-    pygame.draw.line(screen,(0,0,0),(0,0),(0,size[1]),width=5)
-    pygame.draw.line(screen,(0,0,0),(size[0]-1,0),(size[0]-1,size[1]),width=3)
-
-    draw_text("Tic-Tac-Toe!",text_font,(0,0,0),size[0]/2,size[1]/6)
-    draw_text("OTHELLO!",text_font,(0,0,0),size[0]/2,size[1]/2)
-    draw_text("Connect FOUR!",text_font,(0,0,0),size[0]/2,5*size[1]/6)
-    draw_text("Welcome! To pick a game, click anywhere in its box!",font3,(255,255,255),size[0]/2,size[1]+25)
-
-    pygame.display.flip()
-
-# This is the prompt that will show at the end(after leaderboard.sh has been worked on) and ask people if they want to keep playing or quit
-def prompt_to_quit(screen):
-    pygame.draw.rect(screen,(0,0,0),rect=[0,0,size[0],size[1]/2])
-    pygame.draw.rect(screen,(255,255,255),rect=[0,size[1]/2,size[0],size[1]/2])
-    pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
-
-    pygame.draw.line(screen,(255,255,255),(0,0),(size[0],0),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=3)
-    pygame.draw.line(screen,(255,255,255),(0,0),(0,size[1]/2),width=3)
-    pygame.draw.line(screen,(255,255,255),(size[0],0),(size[0],size[1]/2),width=3)
-    pygame.draw.line(screen,(0,0,0),(0,size[1]/2),(0,size[1]),width=3)
-    pygame.draw.line(screen,(0,0,0),(size[0],size[1]/2),(size[0],size[1]),width=3)
-
-    draw_text("Return to the menu and Replay?",font2,(255,255,255),size[0]/2,size[1]/4)
-    draw_text("Quit?",font2,(0,0,0),size[0]/2,3*size[1]/4)
-    draw_text("To pick a choice, click anywhere in its box!",font3,(255,255,255),size[0]/2,size[1]+25)
-
-    pygame.display.flip()
+# history class has functions to append the winner,loser,date,game_name to history.csv and also return the data in history.csv as an numpy array
+# screens needed history so to avoid circular import, i moved it to a seperate file
+from handling_history_csv import history
 
 # player inputs taken from the command line (bash script)
 player1,player2=sys.argv[1],sys.argv[2]
 
-# size according to taste
+# size according to taste, most of the game is very scalable but some part of it is not
 size=(650,650)
 
-# sets the display
+# sets the display, the +50 acts as a footer(where  different messages will be displayed throughout the game)
 screen=pygame.display.set_mode((size[0],size[1]+50))
+
+# sets pygame window name
 pygame.display.set_caption("May the odds be ever in your favor!")
 
-# This is the function that calls the menu and sets it up, according to choice calls the game and plays it
-def game():
+# gameplay has the pygame logic - it calls the menu from screens, calls the plots, calls the final question menu and switches between them
+class Gameplay:
 
-    # menu function 
-    menu(screen)
+    # making a screen object, this is used throughout to call the different displays
+    def __init__(self):
+        self.screen_display=screens()
 
-    game_over=False
+    # This is the function that calls the menu and sets it up, according to choice calls the game and plays it
+    def game(self):
+        # shows menu on the display (game choices)
+        self.screen_display.menu(screen,size)
 
-    while not game_over:
+        while True:
 
-        # initial mouse position- just to initialize
-        mouse_position=(0,0)
-        for event in pygame.event.get():
-            
-            # To let the x button be functional and for a clean exit
-            if event.type==pygame.QUIT:
-                pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
-                pygame.display.flip()
-                pygame.quit()
-                sys.exit()
+            # initial mouse position - just to initialize
+            mouse_position=(0,0)
 
-            # This returns the position of a mouse click - which allows a GUI
-            elif event.type==pygame.MOUSEBUTTONDOWN:
-                mouse_position=event.pos
+            for event in pygame.event.get():
 
-                # if click is in top 1/3rd of screen, tictactoe is called
-                if mouse_position[1]<=size[1]/3:
-                    play=tictactoe(player1,player2,size,10,5)
-                    return (play.actual_game(),"Tic-Tac-Toe")
+                # To let the x button be functional and for a clean exit
+                if event.type==pygame.QUIT:
+                    pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
+                    pygame.display.flip()
+                    pygame.quit()
+                    sys.exit()
                 
-                # if click is in top 1/3rd-2/3rd of screen, othello is called
-                elif mouse_position[1]<=2*size[1]/3:
-                    play=othello(player1,player2,size,8)
-                    return (play.actual_game(),"Othello")
+                # This returns the position of a mouse click - which allows a GUI
+                elif event.type==pygame.MOUSEBUTTONDOWN:
+                    mouse_position=event.pos
 
-                # if click is in bottom 1/3rd of screen, connect4 is called
-                else:
-                    play=connect4(player1,player2,size,7,4)
-                    return (play.actual_game(),"Connect FOUR")
+                    # here an history object is created to append the stats. For each game winner, gamename is returned
+                    history_obj=history(player1,player2)
 
-# This function is the one that calls the menu, games AND appends the player names, game status, date, game_name to history.csv              
-def play_game_and_append():              
-    winner,game_name=game()
-    if winner==player1:
-        
-        f=open("history.csv","a",newline="")
-        writer=csv.writer(f)
-        writer.writerow([player1,"winner",player2,"loser",datetime.date.today(),game_name])
-        f.close()
+                    # if click is in top 1/3rd of screen(excluding footer), tictactoe is called
+                    if mouse_position[1]<=size[1]/3:
+                        play=tictactoe(player1,player2,size,10,5)
+                        winner,game_name=play.actual_game(),"Tic-Tac-Toe"
+                          
+                    # if click is in top 1/3rd-2/3rd of screen(excluding footer), othello is called
+                    elif mouse_position[1]<=2*size[1]/3:
+                        play=othello(player1,player2,size,8)
+                        winner,game_name=play.actual_game(),"Othello"
+                    
+                    # if click is in bottom 1/3rd of screen(excluding footer), connect4 is called
+                    elif mouse_position[1]<=size[1]:
+                        play=connect4(player1,player2,size,7,4)
+                        winner,game_name=play.actual_game(),"Connect FOUR"  
+                    
+                    # History obj was passed the player names, from knowing the winner it can now know the loser and append it to history.csv
+                    history_obj.append_history(winner,game_name)
 
-    elif winner==player2:
-    
-        f=open("history.csv","a",newline="")
-        writer=csv.writer(f)
-        writer.writerow([player1,"loser",player2,"winner",datetime.date.today(),game_name])
-        f.close()
-    
-    else:
-        # the case it is a draw, no winner, loser 
-        f=open("history.csv","a",newline="")
-        writer=csv.writer(f)
-        writer.writerow([player1,"draw",player2,"draw",datetime.date.today(),game_name])
-        f.close()
+                    return
 
-# This is the initial game menu - which is launched regardless
-play_game_and_append()
+    # This makes a plot object, calls charts functions(makes 4 pictures and stores them in plot_pictures) and uses screens which displays the picture on the pygame window       
+    def plots(self):
+        stats=plot(player1,player2)
+        stats.charts()
 
-# After initial game, a question is prompted if they want to go back or continue- an infinite while loop until quit
-while True:
-        prompt_to_quit(screen)
-        mouse_position=(0,0)
+        self.screen_display.picture(screen,size)
 
-        for event in pygame.event.get():
+        # This takes care of the "click anywhere to continue part"
+        while True:
+            for event in pygame.event.get():
             # for quitting by x button
-            if event.type==pygame.QUIT:
-                pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
-                pygame.display.flip()
-                pygame.quit()
-                sys.exit()
-            
-            elif event.type==pygame.MOUSEBUTTONDOWN:
-                mouse_position=event.pos
-                # if choice is to go back, replay the game
-                if mouse_position[1]<=size[1]/2:
-                    play_game_and_append()
-
-                # if not, quit the game   
-                elif mouse_position[1]<=size[1]:
+                if event.type==pygame.QUIT:
                     pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
                     pygame.display.flip()
                     pygame.quit()
                     sys.exit()
 
-# other functionalities like leaderboard.sh, pycharts will be done eventually
+                elif event.type==pygame.MOUSEBUTTONDOWN:
+                    return
+                    
+    # a question is prompted if they want to go back or continue, calls screens which displays the question, this takes care that if quit is called the window closes cleanly
+    def final_screen(self):
+        while True:
+            self.screen_display.prompt_to_quit(screen,size)
+            mouse_position=(0,0)
+
+            for event in pygame.event.get():
+                # for quitting by x button
+                if event.type==pygame.QUIT:
+                    pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
+                    pygame.display.flip()
+                    pygame.quit()
+                    sys.exit()
+
+                elif event.type==pygame.MOUSEBUTTONDOWN:
+                    mouse_position=event.pos
+                    # if choice is to go back, replay the game
+                    if mouse_position[1]<=size[1]/2:
+                        return
+
+                    # if not, quit the game   
+                    elif mouse_position[1]<=size[1]:
+                        pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
+                        pygame.display.flip()
+                        pygame.quit()
+                        sys.exit()
+    
+# it can be seen that all of the gameplay functions return on mousebuttondown, this is so the gameplay can be given sequence, as shown below
+
+# making a game object     
+game=Gameplay()
+
+# this gives it proper sequence(every function below just returns void and comes back, and hence executes the following function unless explicitly quitted)
+while True:
+    game.game()
+    game.plots()
+    game.final_screen()

@@ -85,13 +85,17 @@ class Gameplay:
                     history_obj.append_history(winner,game_name)
                     return
          
+    # gui that allows people to choose a metric to sort the leaderboard by
     def sort(self):
 
+        # designs the display
         self.screen_display.sort_by_what(screen,size)
         mouse_position=(0,0)
         
         while True:
             for event in pygame.event.get():
+
+                # allows players to exit
                 if event.type==pygame.QUIT:
                     pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
                     pygame.display.flip()
@@ -101,6 +105,7 @@ class Gameplay:
                 if event.type==pygame.MOUSEBUTTONDOWN:
                     mouse_position=event.pos
 
+                    # allows players to choose the metric, then runs the respective bash command using subprocess and prints the output on the terminal and returns
                     if mouse_position[1]<=size[1]/5:
                         sorted=subprocess.run('bash leaderboard.sh wins',shell=True,capture_output=True,text=True)
                         print(sorted.stdout)

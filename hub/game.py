@@ -1,6 +1,5 @@
-# pygame for the GUI, sys for a clean exit
-# datetime to append to history.csv, numpy for few general array operations, matplotlib for plotting the stats
-import pygame,sys
+# pygame for the GUI, sys for a clean exit, subprocess to call the bash files
+import pygame,sys,subprocess
 
 # initializes the pygame window
 pygame.init()
@@ -12,15 +11,15 @@ from games.othello import othello
 
 # Everything that is drawn on the pygame window from this file(except for the actual gameplay)- menu's,charts is done through functions in the screens class
 # There was a lot of such designing, so for the modularity of the code i made a seperate python file
-from screen_interfaces import screens
+from support_functions.screen_interfaces import screens
 
 # plot is a class that takes care of plotting the stats(makes arrays from data stored in history.csv), saving the plots as pictures which the screens class can load on the pygame window 
 # this portion of the code was 100+ lines too so i put it in a seperate file as a class
-from matplotlib_plots import plot
+from support_functions.matplotlib_plots import plot
 
 # history class has functions to append the winner,loser,date,game_name to history.csv and also return the data in history.csv as an numpy array
 # screens needed history so to avoid circular import, i moved it to a seperate file
-from handling_history_csv import history
+from support_functions.handling_history_csv import history
 
 # player inputs taken from the command line (bash script)
 player1,player2=sys.argv[1],sys.argv[2]
@@ -84,11 +83,52 @@ class Gameplay:
                     
                     # History obj was passed the player names, from knowing the winner it can now know the loser and append it to history.csv
                     history_obj.append_history(winner,game_name)
-
                     return
+         
+    def sort(self):
 
+        self.screen_display.sort_by_what(screen,size)
+        mouse_position=(0,0)
+        
+        while True:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
+                    pygame.display.flip()
+                    pygame.quit()
+                    sys.exit()
+                
+                if event.type==pygame.MOUSEBUTTONDOWN:
+                    mouse_position=event.pos
+
+                    if mouse_position[1]<=size[1]/5:
+                        sorted=subprocess.run('bash leaderboard.sh wins',shell=True,capture_output=True,text=True)
+                        print(sorted.stdout)
+                        return 
+                    
+                    elif mouse_position[1]<=2*size[1]/5:
+                        sorted=subprocess.run('bash leaderboard.sh losses',shell=True,capture_output=True,text=True)
+                        print(sorted.stdout)
+                        return 
+                    
+                    elif mouse_position[1]<=3*size[1]/5:
+                        sorted=subprocess.run('bash leaderboard.sh draws',shell=True,capture_output=True,text=True)
+                        print(sorted.stdout)
+                        return 
+                    
+                    elif mouse_position[1]<=4*size[1]/5:
+                        sorted=subprocess.run('bash leaderboard.sh ratio',shell=True,capture_output=True,text=True)
+                        print(sorted.stdout)
+                        return 
+                    
+                    elif mouse_position[1]<=size[1]:
+                        sorted=subprocess.run('bash leaderboard.sh total',shell=True,capture_output=True,text=True)
+                        print(sorted.stdout)
+                        return 
+                    
     # This makes a plot object, calls charts functions(makes 4 pictures and stores them in plot_pictures) and uses screens which displays the picture on the pygame window       
     def plots(self):
+
         stats=plot(player1,player2)
         stats.charts()
 
@@ -109,10 +149,11 @@ class Gameplay:
                     
     # a question is prompted if they want to go back or continue, calls screens which displays the question, this takes care that if quit is called the window closes cleanly
     def final_screen(self):
-        while True:
-            self.screen_display.prompt_to_quit(screen,size)
-            mouse_position=(0,0)
 
+        self.screen_display.prompt_to_quit(screen,size)
+        mouse_position=(0,0)
+
+        while True:
             for event in pygame.event.get():
                 # for quitting by x button
                 if event.type==pygame.QUIT:
@@ -142,5 +183,6 @@ game=Gameplay()
 # this gives it proper sequence(every function below just returns void and comes back, and hence executes the following function unless explicitly quitted)
 while True:
     game.game()
+    game.sort()
     game.plots()
     game.final_screen()

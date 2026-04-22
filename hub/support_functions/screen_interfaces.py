@@ -45,9 +45,36 @@ class screens:
         # show all the differences
         pygame.display.flip()
     
-    # to be added
-    def sort_by_what(self,screen):
-        pass
+    # the window that when called sorts by a metric and prints a formatted table(this is the designing part of that)
+    def sort_by_what(self,screen,size):
+        # Draws 5 rectangles that fill the screen (along with footer). Each rectangle has a sorting argument written on it
+        pygame.draw.rect(screen,(255,0,0),rect=[0,0,size[0],size[1]/5])
+        pygame.draw.rect(screen,(204,0,0),rect=[0,size[1]/5,size[0],size[1]/5])
+        pygame.draw.rect(screen,(153,0,0),rect=[0,2*size[1]/5,size[0],size[1]/5])
+        pygame.draw.rect(screen,(102,0,0),rect=[0,3*size[1]/5,size[0],size[1]/5])
+        pygame.draw.rect(screen,(51,0,0),rect=[0,4*size[1]/5,size[0],size[1]/5])
+        pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
+
+        # This draws black lines, seperating the rectangles, making a grid around the rectangles
+        pygame.draw.line(screen,(0,0,0),(0,0),(size[0],0),width=5)
+        pygame.draw.line(screen,(0,0,0),(0,size[1]/5),(size[0],size[1]/5),width=3)
+        pygame.draw.line(screen,(0,0,0),(0,2*size[1]/5),(size[0],2*size[1]/5),width=3)
+        pygame.draw.line(screen,(0,0,0),(0,3*size[1]/5),(size[0],3*size[1]/5),width=3)
+        pygame.draw.line(screen,(0,0,0),(0,4*size[1]/5),(size[0],4*size[1]/5),width=3)
+        pygame.draw.line(screen,(0,0,0),(0,size[1]),(size[0],size[1]),width=5)
+        pygame.draw.line(screen,(0,0,0),(0,0),(0,size[1]),width=5)
+        pygame.draw.line(screen,(0,0,0),(size[0]-1,0),(size[0]-1,size[1]),width=3)
+
+        # This writes text on rectangles - declaring by what statistic it is sorted when a rectange is clicked
+        self.draw_text(screen,"win count",self.font1,(0,0,0),size[0]/2,size[1]/10)
+        self.draw_text(screen,"loss count",self.font1,(0,0,0),size[0]/2,3*size[1]/10)
+        self.draw_text(screen,"draw count",self.font1,(0,0,0),size[0]/2,5*size[1]/10)
+        self.draw_text(screen,"win/loss ratio",self.font1,(255,255,255),size[0]/2,7*size[1]/10)
+        self.draw_text(screen,"total times played",self.font1,(255,255,255),size[0]/2,9*size[1]/10)
+        self.draw_text(screen,"click to sort by that statistic!(check your terminal)",self.font3,(255,255,255),size[0]/2,size[1]+25)
+
+        # show all the differences
+        pygame.display.flip()
 
     # This function makes a seperate screen that shows the pyplots/ stat images
     def picture(self,screen,size):
@@ -59,7 +86,7 @@ class screens:
 
         # matplotlib_plots generates 4 different images - 4 because when all where generated together the quality was very bad and so was the plot fitting
         # plt.savefig is used, it saves the images which are then called here and displayed on the pygame window
-        img1=pygame.image.load('plot_pictures/pie.png')
+        img1=pygame.image.load('support_functions/plot_pictures/pie.png')
 
         # width,height of image=size/2 (not the first row because the pi chart and the bar graph needed different amt of space to look good)
         # the dimensions are a little skewed - i wanted a grid type of look, so the pictures are scaled as suuch
@@ -74,7 +101,7 @@ class screens:
         screen.blit(img1,img_rect)
 
         # 2. bar graph for the top 5 players by win count
-        img2=pygame.image.load('plot_pictures/win.png')
+        img2=pygame.image.load('support_functions/plot_pictures/win.png')
         img2=pygame.transform.scale(img2,(size[0]/2+8,size[0]/2))
         img_rect=img2.get_rect()
 
@@ -83,7 +110,7 @@ class screens:
         screen.blit(img2,img_rect)
 
         # 3. bar graph to show player 1's wins losses draws
-        img3=pygame.image.load('plot_pictures/p1.png')
+        img3=pygame.image.load('support_functions/plot_pictures/p1.png')
         img3=pygame.transform.scale(img3,(size[0]/2-2,size[0]/2-2))
         img_rect=img3.get_rect()
 
@@ -92,7 +119,7 @@ class screens:
         screen.blit(img3,img_rect)
 
         # 4. bar graph to show player 2's wins losses draws
-        img4=pygame.image.load('plot_pictures/p2.png')
+        img4=pygame.image.load('support_functions/plot_pictures/p2.png')
         img4=pygame.transform.scale(img4,(size[0]/2-1,size[0]/2-2))
         img_rect=img4.get_rect()
 

@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 # uses load_data and gives a np.array - this is used to generate respective dictionaries/ arrays for plotting
-from handling_history_csv import history
+from support_functions.handling_history_csv import history
 
 # called in game.py
 class plot:
@@ -67,7 +67,7 @@ class plot:
         plt.title('Most Played Games by frequency')
 
         # saving it as an image, bbox_inches,dpi are all for resolution
-        plt.savefig('plot_pictures/pie.png',bbox_inches='tight',dpi=100)
+        plt.savefig('support_functions/plot_pictures/pie.png',bbox_inches='tight',dpi=100)
         plt.close()
 
         # 2. bargraph of top 5 players by win count
@@ -78,7 +78,7 @@ class plot:
         plt.ylabel("Number of Wins")
         plt.xlabel("Player name")
         plt.title(f"Top {len(names)} players by win count")
-        plt.savefig('plot_pictures/win.png',bbox_inches='tight',dpi=100)
+        plt.savefig('support_functions/plot_pictures/win.png',bbox_inches='tight',dpi=100)
         plt.close()
 
         # 3. bar graph of wins,draws,losses of player 1
@@ -88,7 +88,7 @@ class plot:
         plt.bar_label(bar)
         plt.ylabel("Number of games")
         plt.title(f"{self.player1}'s stats")
-        plt.savefig('plot_pictures/p1.png',bbox_inches='tight',dpi=100)
+        plt.savefig('support_functions/plot_pictures/p1.png',bbox_inches='tight',dpi=100)
         plt.close()
 
         # 4. bargraph of wins,draws,losses of player2
@@ -98,7 +98,7 @@ class plot:
         plt.bar_label(bar)
         plt.ylabel("Number of games")
         plt.title(f"{self.player2}'s stats")
-        plt.savefig('plot_pictures/p2.png',bbox_inches='tight',dpi=100)
+        plt.savefig('support_functions/plot_pictures/p2.png',bbox_inches='tight',dpi=100)
         plt.close()
     
     # this function takes the arrays generated in init and returns arrays that can be used to plot

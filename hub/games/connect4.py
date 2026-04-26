@@ -3,6 +3,7 @@ pygame.init()
 
 # inherits the base class from base_class.py
 from games.base_class import base
+from games.support_functions.designs_connect4 import background
 
 class connect4(base):
     # some of the initialization is inherited from the parent class like - player names
@@ -12,6 +13,8 @@ class connect4(base):
 
     def __init__(self,player1,player2,size,m,n):
         super().__init__(player1,player2,m,n)
+
+        self.backg=background()
 
         # This is for the actual_game function which uses a while loop
         self.game_over=False
@@ -24,7 +27,7 @@ class connect4(base):
 
         pygame.display.set_caption("Connect4")
 
-        self.font=pygame.font.SysFont(None,30,bold=True,italic=False)
+        self.font=pygame.font.SysFont('candara',30,bold=False,italic=False)
 
         # just a welcome message
         self.welcome()
@@ -40,41 +43,19 @@ class connect4(base):
 
         # Shows whose turn it is at the bottom
 
-        self.draw_text(f"{self.player1}(pink)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+        self.backg.draw_text(self.screen,f"{self.player1}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
         pygame.display.flip()
 
     # A function purely used for aesthetics
     def welcome(self):
-        self.screen.fill((0,255,230))
-
-        # Makes a grid
-        for i in range(self.m):
-            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]-4),width=1)
-            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]-4),width=1)
-
-        pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]-4),width=1)
-
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1]-3,self.size[0],53])
-        self.draw_text(f"CONNECT 4",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-
-        pygame.display.flip() 
-
+        self.backg.welcome(self.m,self.screen,self.size)
+        pygame.display.flip()
         # A welcome message
         pygame.display.message_box("Welcome","Welcome to connect 4 {} and {}! Connect 4 to win! {} starts! \nClick anywhere in a column to drop a disk in that column!".format(self.player1,self.player2,self.player1),"info",None,('OK',),0,None)
-        pygame.display.flip()
 
     # this function actually builds the grid the game is played on
     def set_screen(self):
-        self.screen.fill((0,0,0))
-
-        # Makes a grid
-        for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m-2,0),(i*self.size[0]/self.m-2,self.size[1]-4),width=1)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m+2,0),(i*self.size[0]/self.m+2,self.size[1]-4),width=1)
-
-        pygame.draw.line(self.screen,(255,255,255),(self.size[0],0),(self.size[0],self.size[1]-4),width=2)
-        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-4),(self.size[0]-1,self.size[1]-4),width=1)
-
+        self.backg.set_screen(self.m,self.screen,self.size)
         pygame.display.flip()
 
     # actual game function
@@ -163,24 +144,13 @@ class connect4(base):
     # this is the function Game() calls to draw disks
     def update_display(self,cell):
         # This is the function that draws disks at a column
-
-        if self.Turn_id==1:
-            pygame.draw.aacircle(self.screen,(255,105,180),cell,self.length-10)
-
-        else:
-            pygame.draw.aacircle(self.screen,(191,0,255),cell,self.length-10)
-
+        self.backg.update_display(self.screen,cell,self.length,self.Turn_id)
         pygame.display.flip()
-
+        
     # It points it out if a match of 4 has been made by highlighting it
     def highlight(self,indices):
-        for pair in indices:
-            row,column=pair[0],pair[1]
-            cell=(self.size[0]/self.m,self.size[1]/self.m)
-            
-            pygame.draw.rect(self.screen,(255,255,255),rect=[cell[0]*column+3,cell[1]*row,cell[0]-4,cell[1]-2])
-
-            self.update_display((cell[0]*(column+0.5),cell[1]*(row+0.5)))
+        self.backg.highlight(indices,self.screen,self.length,self.size,self.m,self.Turn_id)
+        pygame.display.flip()
 
     # checkwin is inherited from the parent class, this waits for 1.5 s so that the players can wait and see the win happening
     def checkWin(self):
@@ -200,19 +170,8 @@ class connect4(base):
         super().switch_player()
         pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
 
-        if self.Turn==self.player1:
-            self.draw_text(f"{self.player1}(Pink)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-        
-        else:
-            self.draw_text(f"{self.player2}(Purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-        pygame.display.flip()
-    
-    # this function is used to print text on the screen
-    def draw_text(self,text,font,text_col,x,y):
-        img=font.render(text,True,text_col)
-        width,height=img.get_size()
-        self.screen.blit(img,(x-width/2,y-height/2))
-              
+        self.backg.switch_player(self.screen,self.size,self.Turn,self.player1,self.player2)
+        pygame.display.flip()         
 #stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
 #mentioning self in front of everything
 # i forgot to make game function return true

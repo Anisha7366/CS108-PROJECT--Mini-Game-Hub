@@ -3,6 +3,7 @@ pygame.init()
 
 # inherits the base class from base_class.py
 from games.base_class import base
+from games.support_functions.designs_tictactoe import background
 
 # tictactoe and connect4 are nearly identical in logic so parts of the code have been repeated (with changes applied)
 
@@ -15,6 +16,8 @@ class tictactoe(base):
     def __init__(self,player1,player2,size,m,n):
         super().__init__(player1,player2,m,n)
 
+        self.backg=background()
+
         # This is for the actual_game function which uses a while loop
         self.game_over=False
 
@@ -26,7 +29,7 @@ class tictactoe(base):
 
         pygame.display.set_caption("Tic Tac Toe")
 
-        self.font=pygame.font.SysFont(None,30,bold=True,italic=False)
+        self.font=pygame.font.SysFont('candara',30,bold=False,italic=False)
 
         # just a welcome message
         self.welcome()
@@ -39,43 +42,21 @@ class tictactoe(base):
 
         # Shows whose turn it is at the bottom
 
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-        self.draw_text(f"{self.player1}(X)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
+        self.backg.draw_text(self.screen,f"{self.player1}(X)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
         pygame.display.flip()
 
     # A function purely used for aesthetics
     def welcome(self):
-        self.screen.fill((255,192,203))
-
-        # Makes a grid
-        for i in range(self.m):
-            pygame.draw.line(self.screen,(0,0,0),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=1)
-            pygame.draw.line(self.screen,(0,0,0),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=1)
-
-        pygame.draw.line(self.screen,(0,0,0),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=1)
-        pygame.draw.line(self.screen,(0,0,0),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=1)
-
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-        self.draw_text(f"Tic Tac Toe",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-
+        self.backg.welcome_tictactoe(self.screen,self.size,self.m)
         pygame.display.flip() 
 
         # A welcome message
         pygame.display.message_box("Welcome","Welcome to Tic Tac Toe {} and {}! Match {} to win! {} starts!".format(self.player1,self.player2,self.n,self.player1),"info",None,('OK',),0,None)
-        pygame.display.flip()
+
 
     # this function actually builds the grid the game is played on
     def set_screen(self):
-        self.screen.fill((0,0,0))
-
-        # Makes a grid
-        for i in range(self.m):
-            pygame.draw.line(self.screen,(255,255,255),(0,i*self.size[1]/self.m),(self.size[0],i*self.size[1]/self.m),width=2)
-            pygame.draw.line(self.screen,(255,255,255),(i*self.size[0]/self.m,0),(i*self.size[0]/self.m,self.size[1]),width=2)
-
-        pygame.draw.line(self.screen,(255,255,255),(0,self.size[1]-1),(self.size[0],self.size[1]-1),width=2)
-        pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
-        
+        self.backg.set_screen_tictactoe(self.screen,self.size,self.m)
         pygame.display.flip()
 
     # actual game function
@@ -90,7 +71,6 @@ class tictactoe(base):
                 # To let the x button be functional and for a clean exit
                 if event.type==pygame.QUIT:
                     pygame.display.message_box("Bye Bye","We hope you had fun!","info",None,('OK',),0,None)
-                    pygame.display.flip()
                     pygame.quit()
                     sys.exit()
 
@@ -112,7 +92,6 @@ class tictactoe(base):
                             self.game_over=True
 
                             pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-                            self.draw_text(f"{self.Turn} wins!",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
 
                             pygame.display.message_box("YAY", f"{self.Turn} wins!","info",None,('YAY',),0,None)
                             return self.Turn
@@ -121,7 +100,6 @@ class tictactoe(base):
                         elif self.move_number==self.m*self.m:
 
                             pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-                            self.draw_text(f"nobody wins :(",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
 
                             pygame.display.message_box("WOW","It's a draw!","info",None,('WOW',),0,None)
                             self.game_over=True
@@ -161,27 +139,15 @@ class tictactoe(base):
     
     # this is the function Game() calls to draw X's O's
     def update_display(self,cell):
-        # This is the function that X's and O's
-        length=(self.size[0]+self.size[1])/(4*self.m)
-
-        if self.Turn_id==1:
-            pygame.draw.line(self.screen,(150,50,100),(cell[0]-length+9,cell[1]-length+9),(cell[0]+length-9,cell[1]+length-9),width=7)
-            pygame.draw.line(self.screen,(150,50,100),(cell[0]+length-9,cell[1]-length+9),(cell[0]-length+9,cell[1]+length-9),width=7)
-
-        else:
-            pygame.draw.circle(self.screen,(0,0,128),cell,length-5,width=7)
+        self.backg.update_display_tictactoe(cell,self.size,self.m,self.screen,self.Turn_id)
 
         pygame.display.flip()
 
     # It points it out if a match of 5 has been made by highlighting it
     def highlight(self,indices):
-        for pair in indices:
-            row,column=pair[0],pair[1]
-            cell=(self.size[0]/self.m,self.size[1]/self.m)
-            
-            pygame.draw.rect(self.screen,(255,255,255),rect=[cell[0]*column+3,cell[1]*row+3,cell[0]-4,cell[1]-4])
+        self.backg.highlight_tictactoe(indices,self.screen,self.size,self.m,self.Turn_id)
 
-            self.update_display((cell[0]*(column+0.5),cell[1]*(row+0.5)))
+        pygame.display.flip()
 
     # checkwin is inherited from the parent class, this waits for 1.5 s so that the players can wait and see the win happening
     def checkWin(self):
@@ -199,20 +165,10 @@ class tictactoe(base):
     # switch player inherited from parent class
     def switch_player(self):
         super().switch_player()
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-
-        if self.Turn==self.player1:
-            self.draw_text(f"{self.player1}(X)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
         
-        else:
-            self.draw_text(f"{self.player2}(O)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+25)
-        pygame.display.flip()
+        self.backg.switch_player_tictactoe(self.screen,self.size,self.Turn,self.player1,self.player2)
 
-    # this function is used to print text on the screen
-    def draw_text(self,text,font,text_col,x,y):
-        img=font.render(text,True,text_col)
-        width,height=img.get_size()
-        self.screen.blit(img,(x-width/2,y-height/2))
+        pygame.display.flip()
 
 #stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
 #mentioning self in front of everything

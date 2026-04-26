@@ -2,15 +2,21 @@
 # everything that shows up on the screen is in this file(except the individual games ka designs)
 # pygame imported for usable functions
 import pygame
+from pygame.locals import*
+menu = pygame.image.load('support_functions/Images/Menu.png')
+sort = pygame.image.load('support_functions/Images/Sort.png')
+replay = pygame.image.load('support_functions/Images/Replay.png')
+quit = pygame.image.load('support_functions/Images/Quit.png')
 
 # called in game.py
 class screens:
 
     # this initializes some common fonts used throughout the gameplay
     def __init__(self):
-        self.font1=pygame.font.SysFont('Serif',50,bold=True,italic=False)
-        self.font2=pygame.font.SysFont(None,45,bold=True,italic=False)
+        self.font1=pygame.font.SysFont('candara',50,bold=False,italic=False)
+        self.font2=pygame.font.SysFont('franklingothicmedium',50,bold=False,italic=False)
         self.font3=pygame.font.SysFont(None,30,bold=False,italic=False)
+        self.font4=pygame.font.SysFont('candara',35,bold=False,italic=False)
 
     # this function is used to print text on the screen
     def draw_text(self,screen,text,font,text_color,x,y):
@@ -22,10 +28,12 @@ class screens:
 
     # Main menu - that offers 3 games to pick from
     def menu(self,screen,size):
+
+        screen.blit(menu,(0,0))
         # Draws 3 rectangles that fill the screen (along with footer). Each rectangle has a game written on it
-        pygame.draw.rect(screen,(255,192,203),rect=[0,0,size[0],size[1]/3])
-        pygame.draw.rect(screen,(238,130,238),rect=[0,size[1]/3,size[0],size[1]/3])
-        pygame.draw.rect(screen,(0,255,230),rect=[0,2*size[1]/3,size[0],size[1]/3])
+        #pygame.draw.rect(screen,(255,192,203),rect=[0,0,size[0],size[1]/3])
+        #pygame.draw.rect(screen,(238,130,238),rect=[0,size[1]/3,size[0],size[1]/3])
+        #pygame.draw.rect(screen,(0,255,230),rect=[0,2*size[1]/3,size[0],size[1]/3])
         pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
 
         # This draws black lines, seperating the rectangles, making a grid around the rectangles
@@ -48,11 +56,14 @@ class screens:
     # the window that when called sorts by a metric and prints a formatted table(this is the designing part of that)
     def sort_by_what(self,screen,size):
         # Draws 5 rectangles that fill the screen (along with footer). Each rectangle has a sorting argument written on it
-        pygame.draw.rect(screen,(255,0,0),rect=[0,0,size[0],size[1]/5])
-        pygame.draw.rect(screen,(204,0,0),rect=[0,size[1]/5,size[0],size[1]/5])
-        pygame.draw.rect(screen,(153,0,0),rect=[0,2*size[1]/5,size[0],size[1]/5])
-        pygame.draw.rect(screen,(102,0,0),rect=[0,3*size[1]/5,size[0],size[1]/5])
-        pygame.draw.rect(screen,(51,0,0),rect=[0,4*size[1]/5,size[0],size[1]/5])
+
+        screen.blit(sort,(0,0))
+
+        #pygame.draw.rect(screen,(255,0,0),rect=[0,0,size[0],size[1]/5])
+        #pygame.draw.rect(screen,(204,0,0),rect=[0,size[1]/5,size[0],size[1]/5])
+        #pygame.draw.rect(screen,(153,0,0),rect=[0,2*size[1]/5,size[0],size[1]/5])
+        #pygame.draw.rect(screen,(102,0,0),rect=[0,3*size[1]/5,size[0],size[1]/5])
+        #pygame.draw.rect(screen,(51,0,0),rect=[0,4*size[1]/5,size[0],size[1]/5])
         pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
 
         # This draws black lines, seperating the rectangles, making a grid around the rectangles
@@ -66,12 +77,12 @@ class screens:
         pygame.draw.line(screen,(0,0,0),(size[0]-1,0),(size[0]-1,size[1]),width=3)
 
         # This writes text on rectangles - declaring by what statistic it is sorted when a rectange is clicked
-        self.draw_text(screen,"win count",self.font1,(0,0,0),size[0]/2,size[1]/10)
-        self.draw_text(screen,"loss count",self.font1,(0,0,0),size[0]/2,3*size[1]/10)
-        self.draw_text(screen,"draw count",self.font1,(0,0,0),size[0]/2,5*size[1]/10)
-        self.draw_text(screen,"win/loss ratio",self.font1,(255,255,255),size[0]/2,7*size[1]/10)
-        self.draw_text(screen,"total times played",self.font1,(255,255,255),size[0]/2,9*size[1]/10)
-        self.draw_text(screen,"click to sort by that statistic!(check your terminal)",self.font3,(255,255,255),size[0]/2,size[1]+25)
+        self.draw_text(screen,"NUMBER OF WINS",self.font4,(0,0,0),size[0]/2,size[1]/10)
+        self.draw_text(screen,"NUMBER OF LOSSES",self.font4,(0,0,0),size[0]/2,3*size[1]/10)
+        self.draw_text(screen,"NUMBER OF DRAWS",self.font4,(0,0,0),size[0]/2,5*size[1]/10)
+        self.draw_text(screen,"WIN TO LOSS RATIO",self.font4,(0,0,0),size[0]/2,7*size[1]/10)
+        self.draw_text(screen,"TOTAL GAMES PLAYER",self.font4,(0,0,0),size[0]/2,9*size[1]/10)
+        self.draw_text(screen,"Click to sort by that statistic! (check your terminal)",self.font3,(255,255,255),size[0]/2,size[1]+25)
 
         # show all the differences
         pygame.display.flip()
@@ -133,9 +144,15 @@ class screens:
     # This is the screen that will show at the end and ask people if they want to keep playing or quit
     def prompt_to_quit(self,screen,size):
         # Draws two rectangles that fill the screen (along with footer). Each has a choice written on it.
-        pygame.draw.rect(screen,(0,0,0),rect=[0,0,size[0],size[1]/2])
-        pygame.draw.rect(screen,(255,255,255),rect=[0,size[1]/2,size[0],size[1]/2])
+        #pygame.draw.rect(screen,(0,0,0),rect=[0,0,size[0],size[1]/2])
+        #pygame.draw.rect(screen,(255,255,255),rect=[0,size[1]/2,size[0],size[1]/2])
+        scaled_replay = pygame.transform.smoothscale(replay, (size[0], size[1]/2))
+        screen.blit(scaled_replay,(0,0))
+        scaled_quit = pygame.transform.smoothscale(quit, (size[0], size[1]/2))
+        screen.blit(scaled_quit,(0, size[1]/2))
+
         pygame.draw.rect(screen,(0,0,0),rect=[0,size[1],size[0],50])
+
 
         # Makes a small grid, defining the edges around the rectangles
         pygame.draw.line(screen,(255,255,255),(0,0),(size[0],0),width=3)
@@ -146,8 +163,8 @@ class screens:
         pygame.draw.line(screen,(0,0,0),(size[0],size[1]/2),(size[0],size[1]),width=3)
 
         # Writes text on the rectangles to offer choices, the footer
-        self.draw_text(screen,"Return to the menu and Replay?",self.font2,(255,255,255),size[0]/2,size[1]/4)
-        self.draw_text(screen,"Quit?",self.font2,(0,0,0),size[0]/2,3*size[1]/4)
+        self.draw_text(screen,"REPLAY",self.font2,(0,0,0),size[0]/2,size[1]/4)
+        self.draw_text(screen,"QUIT",self.font2,(0,0,0),size[0]/2,3*size[1]/4)
         self.draw_text(screen,"To pick a choice, click anywhere in its box!",self.font3,(255,255,255),size[0]/2,size[1]+25)
 
         # shows the changes

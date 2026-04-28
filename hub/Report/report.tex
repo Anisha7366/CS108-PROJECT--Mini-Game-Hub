@@ -1,0 +1,70 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} 
+
+\title{Mini Game Hub \LaTeX{}  Report}
+\author{Alice Patel \\
+Anisha Dash }
+
+\date{April 2026}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{External Libraries}
+
+\section{Design \& Architecture}
+
+\section{Features Included}
+
+\subsection {Authentication}
+
+Authentication is implemented entirely in main.sh. 
+On starting it prompts with "Press r for login and n to make a new account." \\
+\indent If n is entered, it prompts for username and password. The prompt for password has the username in it for clarity (eg: Enter password for Vimes). Terminal prompts for username and password again if the username already exists. Once account is successfully made, it prompts again whether you want to login or make another new account or quit. \\
+\indent If r is entered, it prompts for username and password. If username doesn't exist, it says so and prompts for r, n, or q (for quit). If n is pressed, a new account is created with the inputted credentials and the username and password are prompted again. If password for the username is incorrect it says "Either username or password are incorrect" \footnote {this is following the footpath of Google logins, protecting the privacy of the users and also considering that there could have been a typo in the username that happened to be another existing username}. It prompts for r, n, or q again. If username and password match, it declares success and prompts Player 2 in a similar manner. \\
+\indent Once both users are successfully logged in, game is launched. At any point during the process if someone enters something unexpected (eg: z in place r, n or q) game will not launch at the end. 
+
+
+\subsection {Tic-Tac-Toe}
+\subsection{Othello}
+
+The game opens with a short introduction of Othello and who goes first in a message box. A screen with Othello board is visible in the background. The game has the following features:
+\begin{description} 
+\item[Aesthetics] The board has a floral background, white grid, blue and purple discs and small grey discs where potential moves can be made. A panel at the bottom keeps track of whose turn it is.
+\item[Moves] Once a move is made, the discs that are supposed to flip change color with a short time delay, giving the impression of flipping. The old potential move discs disappear and new discs appear. 
+\item[Errors] If user clicks on a box that is already occupied, on the bottom panel or on an empty box, a message window with corresponding message appears.
+\item[No valid move] If a player can make no valid move, their turn is skipped. This is informed via a message box. 
+
+
+\end{description}
+\subsection{Connect Four}
+\subsection{Menu Screens}
+\subsection{MatPlotLib Graphs}
+\subsection{Terminal Tables}
+
+
+\section{Implementation}
+\subsection {Authentication}
+\subsection {Tic-Tac-Toe}
+\subsection{Othello}
+\subsection{Connect Four}
+\subsection{Menu Screens}
+\subsection{MatPlotLib Graphs}
+\subsection{Terminal Tables}
+
+\section{Directory Structure}
+
+\section{Installation \& Setup}
+
+\section{Usage}
+
+\section{Retrospection}
+
+\section{References}
+
+
+
+\end{document}

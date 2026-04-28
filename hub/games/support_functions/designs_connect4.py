@@ -62,7 +62,7 @@ class background:
             row,column=pair[0],pair[1]
             cell=(size[0]/m,size[1]/m)
             
-            pygame.draw.rect(screen,(255,255,255),rect=[cell[0]*column+3,cell[1]*row,cell[0]-4,cell[1]-2])
+            pygame.draw.rect(screen,(255, 248, 230),rect=[cell[0]*column+3,cell[1]*row,cell[0]-4,cell[1]-2])
 
             self.update_display(screen,(cell[0]*(column+0.5),cell[1]*(row+0.5)),length,Turn_id)
 

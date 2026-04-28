@@ -52,11 +52,11 @@ class background:
         length=(size[0]+size[1])/(4*m)
 
         if Turn_id==1:
-            pygame.draw.line(screen,(150,50,100),(cell[0]-length+9,cell[1]-length+9),(cell[0]+length-9,cell[1]+length-9),width=7)
-            pygame.draw.line(screen,(150,50,100),(cell[0]+length-9,cell[1]-length+9),(cell[0]-length+9,cell[1]+length-9),width=7)
+            pygame.draw.line(screen,(150,50,100),(cell[0]-length+9,cell[1]-length+9),(cell[0]+length-9,cell[1]+length-9),width=5)
+            pygame.draw.line(screen,(150,50,100),(cell[0]+length-9,cell[1]-length+9),(cell[0]-length+9,cell[1]+length-9),width=5)
 
         else:
-            pygame.draw.circle(screen,(0,0,128),cell,length-5,width=7)
+            pygame.draw.aacircle(screen,(0,0,128),cell,length-5,width=3)
 
         pygame.display.flip()
 

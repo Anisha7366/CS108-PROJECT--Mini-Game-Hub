@@ -96,7 +96,7 @@ class screens:
         # the dimensions are a little skewed - i wanted a grid type of look, so the pictures are scaled as suuch
 
         # 1. pi chart - no. of times each game was played
-        img1=pygame.transform.scale(img1,(size[0]/2-11,size[0]/2))
+        img1=pygame.transform.smoothscale(img1,(size[0]/2-2,size[0]/2))
         img_rect=img1.get_rect()
 
         img_rect.top,img_rect.left=1,1
@@ -106,16 +106,16 @@ class screens:
 
         # 2. bar graph for the top 5 players by win count
         img2=pygame.image.load('support_functions/plot_pictures/win.png')
-        img2=pygame.transform.scale(img2,(size[0]/2+8,size[0]/2))
+        img2=pygame.transform.smoothscale(img2,(size[0]/2-1,size[0]/2))
         img_rect=img2.get_rect()
 
-        img_rect.top,img_rect.left=1,size[0]/2-9
+        img_rect.top,img_rect.left=1,size[0]/2
 
         screen.blit(img2,img_rect)
 
         # 3. bar graph to show player 1's wins losses draws
         img3=pygame.image.load('support_functions/plot_pictures/p1.png')
-        img3=pygame.transform.scale(img3,(size[0]/2-2,size[0]/2-2))
+        img3=pygame.transform.smoothscale(img3,(size[0]/2-2,size[0]/2-2))
         img_rect=img3.get_rect()
 
         img_rect.top,img_rect.left=size[0]/2+2,1
@@ -124,7 +124,7 @@ class screens:
 
         # 4. bar graph to show player 2's wins losses draws
         img4=pygame.image.load('support_functions/plot_pictures/p2.png')
-        img4=pygame.transform.scale(img4,(size[0]/2-1,size[0]/2-2))
+        img4=pygame.transform.smoothscale(img4,(size[0]/2-1,size[0]/2-2))
         img_rect=img4.get_rect()
 
         img_rect.top,img_rect.left=size[0]/2+2,size[0]/2

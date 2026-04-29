@@ -165,10 +165,13 @@ function printing(user, i) {
 
 #print("Function entered")
 
-printf "%-17s %-13s %-10s %-10s %-10s\n", "Usernames", "Total played", "Wins", "Losses", "Draws"
+printf "%-17s %-13s %-10s %-10s %-10s %-10s\n", "Usernames", "Total played", "Wins", "Losses", "Draws", "Win-loss ratio"
 printf "\n"
 for (j=i-1; j>=0; j--) {
-printf "%-17s %-13s %-10s %-10s %-10s\n", user[j,0], user[j,1]+user[j,2]+user[j,3], user[j,1], user[j,2], user[j,3]
+if(user[j,2] == 0 && user[j,1] == 0) {x=0}
+else if(user[j,2] == 0) {x = "inf"}
+else {x = user[j,1]/user[j,2]}
+printf "%-17s %-13s %-10s %-10s %-10s %-10s\n", user[j,0], user[j,1]+user[j,2]+user[j,3], user[j,1], user[j,2], user[j,3], x
 
 }
 }

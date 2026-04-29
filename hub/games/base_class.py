@@ -35,71 +35,103 @@ class base:
         return False
 
     def Horizontal(self,indices):
-        # for every row, every consecutive n element array in the row(which is obtained by splicing) is compared to a n element array(all elements are turn_id)
-        # This returns an array of booleans. If they match exactly all elements will be true
-        # if even one element doesn't match, it will be false and hence the product of the array will be 0
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range(0,self.m):
-            for j in range(0,self.m-self.n+1):
-                a=(self.board[i][j:j+self.n:1]==compare)
-                if np.prod(a)!=0:
 
-                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
-                    for k in range (self.n):
-                        indices.append((i,j+k))
+        player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
-                    return True
+        windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,),axis=1)
+
+        check_horizontal=np.all(windows,axis=2)
+
+        if(np.any(check_horizontal)):
+            row,col=np.where(check_horizontal==True)[0][0],np.where(check_horizontal==True)[1][0]
+            self.Append(indices,row,col,'h')
+            return True
+        
+        return False
+        
+
+        # if self.n==4:
+        #     check_horizontal=player_positions[:,3:] & player_positions[:,2:self.m-1] & player_positions[:,1:self.m-2] & player_positions[:,:self.m-3]
+
+        #     if np.any(check_horizontal):
+        #         index=np.where(check_horizontal==True)
+        #         one,two=index[0][0],index[1][0]
+        #         indices.extend([(one,two),(one,two+1),(one,two+2),(one,two+3)])
+        #         return True
+
+        # if self.n==5:
+        #     check_horizontal=player_positions[:,4:] & player_positions[:,3:self.m-1] & player_positions[:,2:self.m-2] & player_positions[:,1:self.m-3] & player_positions[:,:self.m-4]
+
+        #     if np.any(check_horizontal):
+        #         index=np.where(check_horizontal==True)
+        #         one,two=index[0][0],index[1][0]
+        #         indices.extend([(one,two),(one,two+1),(one,two+2),(one,two+3),(one,two+4)])
+        #         return True
+            
         return False
 
     def Vertical(self,indices):
-        # similar to check horizontal
-        # for every column, every consecutive n element array is matched and checked
-        # for some reason the splicing gave a horizontal array so i compared it to a horizontal array
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range(0,self.m):
-            for j in range(0,self.m-self.n+1):
-                a=(self.board[j:j+self.n:1,i]==compare)
-                if np.prod(a)!=0:
 
-                    # This is just returning the indices so i can highlight the screen when a win happens. It does not check for a win condition
-                    for k in range (self.n):
-                        indices.append((j+k,i))
+        player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
-                    return True
+        windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,1))
+
+        check_vertical=np.all(windows,axis=2)
+
+        if(np.any(check_vertical)):
+            row,col=np.where(check_vertical==True)[0][0],np.where(check_vertical==True)[1][0]
+            self.Append(indices,row,col,'v')
+            return True
+        
         return False
 
     def Diagonal_right(self,indices):
-        # this finds every n x n matrix (with consecutive rows and columns) and compares its diagonal to the full array(\)
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range (0,self.m-self.n+1):
-            for j in range(0,self.m-self.n+1):
-                sub_matr=self.board[i:i+self.n,j:j+self.n]
-                diag=sub_matr.diagonal()
-                a=(diag==compare)
-                if np.prod(a)!=0:
 
-                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
-                    for k in range (self.n):
-                        indices.append((i+k,j+k))
+        player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
-                    return True
+        windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,self.n))
+
+        compare=np.full((1,self.n),True)
+
+        check_diagonal=np.all(windows.diagonal(axis1=2,axis2=3)==compare,axis=2)
+
+        if(np.any(check_diagonal)):
+            row,col=np.where(check_diagonal==True)[0][0],np.where(check_diagonal==True)[1][0]
+            self.Append(indices,row,col,'rd')
+            return True
+        
         return False
     
     def Diagonal_left(self,indices):
-        # This finds every n x n matrix (with consecutive rows and columns) and compares its alternate diagonal(/) to the full array
-        compare=np.full((1,self.n),self.Turn_id)
-        for i in range (0,self.m-self.n+1):
-            for j in range(0,self.m-self.n+1):
-                sub_matr=self.board[i:i+self.n,j:j+self.n]
-                L_diag=np.fliplr(sub_matr).diagonal()
-                a=(L_diag==compare)
-                if np.prod(a)!=0:
 
-                    # This is just returning the indices so i can highlight when a win happens. It does not check for a win condition
-                    for k in range (self.n):
-                        indices.append((i+k,j+self.n-1-k))
-                        
-                    return True
+        player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
+
+        windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,self.n))
+
+        compare=np.full((1,self.n),True)
+
+        check_diagonal=np.all(np.flip(windows,axis=3).diagonal(axis1=2,axis2=3)==compare,axis=2)
+
+        if(np.any(check_diagonal)):
+            row,col=np.where(check_diagonal==True)[0][0],np.where(check_diagonal==True)[1][0]
+            self.Append(indices,row,col,'ld')
+            return True
+        
         return False
+    
+    def Append(self,indices,row,col,parameter):
+        if(parameter=='h'):
+            for i in range(self.n):
+                indices.append((row,col+i))
+        elif(parameter=='v'):
+            for i in range(self.n):
+                indices.append((row+i,col))
+        elif(parameter=='rd'):
+            for i in range(self.n):
+                indices.append((row+i,col+i))
+        elif(parameter=='ld'):
+            for i in range(self.n):
+                indices.append((row+i,col+4-i))
+        return
 
 # issue faced - circular import

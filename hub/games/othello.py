@@ -7,7 +7,7 @@ pygame.init()
 from games.base_class import base
 
 #imports the background image an stores into back
-back = pygame.image.load('games/Othello.png')
+back = pygame.image.load('games/support_functions/images/Othello.png')
 
 
 

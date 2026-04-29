@@ -1,31 +1,150 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx} 
+\usepackage{dirtree}
 
 \title{Mini Game Hub \LaTeX{}  Report}
 \author{Alice Patel \\
+\& \\
 Anisha Dash }
 
-\date{April 2026}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
 \tableofcontents
+\clearpage
 
-\section{External Libraries}
+\section{Libraries used}
+
+\subsection{External libraries}
+
+\subsubsection{pygame}
+pygame is the main library in the gameplay. It allows a GUI - players can click and choose.
+
+\noindent It is imported for this reason in 
+
+\noindent \textbf{game.py,} \textbf{connect4.py,} \textbf{othello.py,} \textbf{tictactoe.py}.
+
+\noindent pygame is used for the designing of the game screens - like drawing circles and crosses, setting backgrounds for different games, showing the menu's.
+
+\noindent It is imported for this reason in 
+
+\noindent \textbf{screen\_interfaces.py,} \textbf{designs\_connect4.py,} \textbf{designs\_tictactoe.py}
+
+\subsubsection{numpy}
+numpy is the main library used for the logic of the gameplay. Numpy is used to initialize the gameboard, np.lib.stride\_tricks.sliding\_window\_view is used to check for win condition, numpy is used for matplotlib charts generation.
+
+\noindent It is imported in 
+
+\noindent \textbf{handling\_history\_csv.py,} \textbf{matplotlib\_plots.py,} \textbf{base\_class.py}. 
+
+\subsubsection{matplotlib}
+matplotlib is used to visualize some stats like - pie chart of games played by frequency, top 5 players by win count, stats of player1, stats of player2
+
+\noindent It is imported in \textbf{matplotlib\_plots.py}
+
+\subsection{Standard libraries}
+
+\subsubsection{sys}
+sys allows a clean exit from the pygame window if the close button is clicked.
+
+\noindent It is imported in \textbf{game.py}, \textbf{connect4.py, othello.py, tictactoe.py}.
+
+\subsubsection{subprocess}
+subprocess is used to run - bash leaderboard.sh [argument] through python. This is used to print a leaderboard sorted by the argument - [argument].
+
+\noindent It is imported in \textbf{game.py}.
+
+\subsubsection{csv}
+csv is used to handle history.csv . csv reader object is used to load each row as an array, csv writer object is used to append the game results to history.csv .
+
+\noindent It is imported in  \textbf{handling\_history\_csv.py}
+
+\subsubsection{datetime}
+datetime is used while appending the results of a game(including date) to history.csv.
+
+\noindent It is imported in  \textbf{handling\_history\_csv.py}.
+
+\subsubsection{collections}
+collections.counter is used to count the number of occurences of an element in an array. This is used to count the number of wins/losses/draws of a player which is inturn used for plotting.
+
+\noindent It is imported in  \textbf{matplotlib\_plots.py}.
+\clearpage
+
+\section{Directory Structure}
+
+\dirtree{%
+.1 hub/ \hfill \# Multi-user game hub.. 
+.2 main.sh \hfill \# User authentication and game engine launch..
+.2 users.tsv \hfill \# Stores the username \& hashed password..
+.2 game.py \hfill \# Manages python flow..
+.2 games/ \hfill \# Stores individual games independently..
+.3 base\_class.py \hfill \# Parent class that is inherited..
+.3 tictactoe.py \hfill \# The GUI code of tictactoe..
+.3 othello.py \hfill \# The GUI code of othello..
+.3 connect4.py \hfill \# The GUI code of connect4..
+.3 support\_functions/ \hfill \# Background images, functions..
+.4 designs\_connect4.py \hfill \# Functions design connect4..
+.4 designs\_tictactoe.py \hfill \# Functions design tictactoe..
+.4 images/ \hfill \# Background images for the games..
+.5 connect4.png \hfill \# For connect4.. 
+.5 Othello.png \hfill \# For othello..
+.5 tictactoe.png \hfill \# For tictactoe..
+.2 history.csv \hfill \# Stores result of game..
+.2 support\_functions/ \hfill \# Functions that support game.py..
+.3 screen\_interfaces.py \hfill \# Designs everything..
+.3 matplotlib\_plots.py \hfill \# Makes the matplotlib charts..
+.3 handling\_history\_csv.py \hfill \# Appends to and loads history..
+.3 Images/ \hfill \#  Various background images..
+.4 Menu.png \hfill \# Menu background..
+.4 Quit.png \hfill \# Quit page background..
+.4 Replay.png \hfill \# Replay page background..
+.4 Sort.png \hfill \# Sort page background..
+.3 plot\_pictures/ \hfill \# Stores the matplotlib charts as pngs..
+.4 p1.png \hfill \# Win,draw,loss count of player1..
+.4 p2.png \hfill \# Win,draw,loss count of player 2..
+.4 pie.png \hfill \# Pie chart of games played by frequency..
+.4 win.png \hfill \# Top 5 players by win count..
+.2 leaderboard.sh \hfill \# Sorts history.csv by given argument..
+.2 Report/ \hfill \# The report files.. 
+.3 report.tex \hfill \# Latex file..
+.3 report.pdf \hfill \# Report pdf..
+.3 report.bib \hfill \# Bibliography file..
+.3 Makefile \hfill \# Makefile to compile latex report..
+}
+
 
 \section{Design \& Architecture}
 
-\section{Features Included}
+\begin{description}
+  \item[bash main.sh] opens a prompt in the terminal which is used for login and authentication. It then stores the usernames and hashed passwords in \textbf{users.tsv}. Then, it launches \textbf{game.py}.
+  \item[game.py] launches a menu screen (design in \textbf{screen\_interfaces.py}).
+  Calls the respective game clicked (\textbf{connect4.py, othello.py, tictactoe.py}). 
+  Appends the result to history.csv using \textbf{handling\_history\_csv.py}, shows a sort menu(design in \textbf{screen\_interfaces.py}).
+  Sorts stats by given selected metric and prints it on the terminal (using \textbf{leaderboard.sh}). 
+  Shows matplotlib charts (using \textbf{matplotlib\_charts.py}, \textbf{handling\_history\_csv.py}).
+  Shows a menu to quit or replay (using \textbf{screen\_interfaces.py}), quits if required or replays the whole game.
+  \item[game.py support functions] These are functions in game.py that were put into seperate files for modularity.
+  All of the designing is done by \textbf{screen\_interfaces.py}. Background images are stored in \textbf{Images}.
+  Matplotlib charts are produced by \textbf{matplotlib\_charts.py} as images and stored in \textbf{plot\_pictures}.
+  All of the appending, and unloading of data of \textbf{history.csv} is done by \textbf{handling\_history\_csv.py}.
+  \item[base\_class.py] Contains the parent class that the game classes inherit from. Intitializes variables, has an overridable method for win check, method to switch players. It is put it in a seperate file (and not \textbf{game.py}) to prevent circular import
+  \item[tictactoe.py othello.py connect4.py] contain game classes that inherit from \textbf{base\_class.py}. Rus the individual games. 
+  \textbf{connect4.py} and \textbf{tictactoe.py} have their designs in \textbf{designs\_connect4.py} and \textbf{designs\_tictactoe.py} for modularity.
+  \item[game support functions] Background images are stored in \textbf{images}. 
+  Designs are stored in \textbf{designs\_connect4.py} and \textbf{designs\_othello.py}.
+  \item[report] This folder stores \textbf{report.tex, report.pdf, report.bib and Makefile}
+\end{description}
 
+\clearpage
+
+\section {Features Included}
 \subsection {Authentication}
 
-Authentication is implemented entirely in main.sh. 
-On starting it prompts with "Press r for login and n to make a new account." \\
-\indent If n is entered, it prompts for username and password. The prompt for password has the username in it for clarity (eg: Enter password for Vimes). Terminal prompts for username and password again if the username already exists. Once account is successfully made, it prompts again whether you want to login or make another new account or quit. \\
-\indent If r is entered, it prompts for username and password. If username doesn't exist, it says so and prompts for r, n, or q (for quit). If n is pressed, a new account is created with the inputted credentials and the username and password are prompted again. If password for the username is incorrect it says "Either username or password are incorrect" \footnote {this is following the footpath of Google logins, protecting the privacy of the users and also considering that there could have been a typo in the username that happened to be another existing username}. It prompts for r, n, or q again. If username and password match, it declares success and prompts Player 2 in a similar manner. \\
-\indent Once both users are successfully logged in, game is launched. At any point during the process if someone enters something unexpected (eg: z in place r, n or q) game will not launch at the end. 
+Authentication is implemented entirely in main.sh. \\
+\indent It gives choice between login or make a new account in the beginning. All inputs are handled with terminal prompts, e.g. ``Username does not exist", ``Either username or password are incorrect", etc. During login, only if username and password match for both players, the process is considered successful and the game launches.
 
 
 \subsection {Tic-Tac-Toe}
@@ -33,11 +152,11 @@ On starting it prompts with "Press r for login and n to make a new account." \\
 
 The game opens with a short introduction of Othello and who goes first in a message box. A screen with Othello board is visible in the background. The game has the following features:
 \begin{description} 
-\item[Aesthetics] The board has a floral background, white grid, blue and purple discs and small grey discs where potential moves can be made. A panel at the bottom keeps track of whose turn it is.
-\item[Moves] Once a move is made, the discs that are supposed to flip change color with a short time delay, giving the impression of flipping. The old potential move discs disappear and new discs appear. 
-\item[Errors] If user clicks on a box that is already occupied, on the bottom panel or on an empty box, a message window with corresponding message appears.
+\item[Visual] The board has a floral background, white grid, blue and purple discs and small grey discs where potential moves can be made. A panel at the bottom keeps track of whose turn it is.
+\item[Moves] Once a move is made, the discs that are supposed to flip change color with a short time delay, giving the impression of flipping. The old potential-move discs disappear and new discs appear. 
+\item[Errors] If user clicks on a box that is already occupied, or on an empty box, a message window with corresponding message appears.
 \item[No valid move] If a player can make no valid move, their turn is skipped. This is informed via a message box. 
-
+\item [Exit] When the board is filled or neither player can make any more moves, the game ends and the winner is declared via message box. At any point, if cross is clicked, the game exits with a message box.
 
 \end{description}
 \subsection{Connect Four}
@@ -45,23 +164,121 @@ The game opens with a short introduction of Othello and who goes first in a mess
 \subsection{MatPlotLib Graphs}
 \subsection{Terminal Tables}
 
+ 
+Four tables are made in the terminal; one for each game and one for total statistics of all games. They are sorted by whatever the user selected in the previous python menu. All of them have six columns- usernames, Total played, wins, losses, draws and ratio of win to losses. \footnote{In case of a tie, table is drawn in the order of appending. Except if the sorting parameter is win/loss ratio, in which tables are sorted as fairly as possible.}
+
 
 \section{Implementation}
 \subsection {Authentication}
+
+
+The following functions are used in the program: 
+\begin{description}
+    \item[escape\_regex] The function takes a string and uses sed to escape regex characters like \$ * \^{} etc. so that they can be used in passwords and username without interfering with grep.
+    \item[check\_user] The function takes a string input and checks if the username exists, using grep to search through users.tsv. It returns ``Exists" and ``Does not exist".
+    \item[check\_pass] Takes two strings and checks using grep is the username,  pair is correct. Returns ``Match" and ``Issue" accordingly. What the issue is, is not specified. That is handled in the main function.
+    \item[add\_user] Takes two strings as arguments. Checks if the user already exists using check\_user and return ``Fail" if it does. It appends the username and hashed password to users.tsv.
+\end{description}
+
+\indent The major flow of the program is dependent on while loops and two keys- \textit{key} for Player1 and \textit{key2} for Player2. \\ 
+\indent The initial prompt for n (new account), q (quit) or r (login) stores the input into the variable \textit{key}. \\
+\indent The first while loop is entered if \textit{key} is `n'. Username and password are prompted (and password is hashed using sha256sum) and add\_user is used to append to users.tsv, or show error and prompt again. Once new account is made, another prompt for key value is asked. \\
+\indent The second while loop is entered if \textit{key} is `r'. Username and password are taken as input and password is hashed. check\_user and check\_pass are called. If check\_pass returns ``Match" then login is declared successful, \textit{key} is changed to s and username is stored in \textit{player1}. Else if check\_user returns ``Exist" (and it wasn't a match, meaning password was incorrect), corresponding message is outputted \footnote {It prints ``Either username or password are incorrect. This is following the footpath of Google logins, protecting the privacy of the users and also considering that there could have been a typo in the username that happened to be another existing username} and prompt for key is printed again. 
+Else it outputs ``No account exists." and asks whether they want to make a new account or try again and change the value of key accordingly. If \textit{key} is `n', add\_user is called and key is turned to `r'. \\
+\indent The while loop for Player2 works in a similar manner, except for a while loop inside it that ensures that Player2 and Player1 are not the same. This loop is not entered if \textit{key} is `q' to ensure that anytime q is pressed the program quits.  \\
+\indent game.py is launched at the end if both keys are `s' with \textit{player1} and \textit{player2} as arguments. In case of any errors, the keys aren't `s' and this block isn't entered and the program just quits. 
+
+
 \subsection {Tic-Tac-Toe}
 \subsection{Othello}
+The following functions are used in the program (defined within the othello class):
+\begin{description}
+    \item[Constructor] This sets up the screen and variables like \textit{size}, \textit{move\_number} (no. of discs on the board), \textit{length} (length of a box), etc. It calls the functions self.welcome() and self.set\_screen(). 
+    \item[welcome] This sets up the welcome message, with background added with screen.blit and grid drew on with pygame. A short introduction is made with a message box.
+    \item[set\_screen] This prints the background image on the screen, draws grid (with pygame.draw.line) and draws the four circles in the center (with pygame.draw.aacircle). It also draws the black strip at the bottom for turn tracking.
+    \item[valid\_move\_exist] This loops through boxes of the entire board and checks if the player with id \textit{Turn\_id} can make a move in a specific box (using valid\_move\_exist) and returns True or False according to whether they can make a move anywhere.
+    \item[potential\_moves] Loops through boxes of the entire board and draws a small grey circle where a valid move can made by the player with id \textit{Turn\_id}.
+    \item[check\_if\_valid] It checks if a move is valid. \textit{direction} stores the eight directions along which a series of flips can happen. Suppose the disc placed is blue. It moves along all eight directions (incrementing i using a while loop) as long as the discs are purple. If the ith disc is not purple, we check if the ith disc is blue or blank. If it's blue and i is not one (i.e. two consecutive blues) \textit{change} is incremented. After all eight directions are thus processed, \textit{change} is returned as the number of discs flipped if this move is made. 
+    \item[update\_board] Runs a similar process as check\_if\_valid and updates the numpy array \textit{board} with the flipped values (1 is for Player1's disc, 2 is for Player2's disc and 0 is for empty box). This does not update the screen, only the array. 
+    \item[Game] Checks if a box is empty and updates the screen to draw a circle in that box. This does not ensure if the move is valid according to the rules of Othello. Returns True or False based on if the box is empty or not. 
+    \item[update\_display] Draws a circle at the given position and color according to \textit{Turn\_id}. Does not touch \textit{board}.
+    \item[verify] Checks if a box at the given row and column is empty, returns True or False.
+    \item[update\_after\_move] Loops through the numpy array and draws discs on the screen according to it. Draws the bottom strip and the text on it. Essentially sets up the discs on the screen anew. 
+    \item[checkWin] Makes two boolean matrix of places where the value in \textit{board} is 1 and 2. This is used as an index for an $m \times m$ matrix which is flattened and measured to find the number of $1_{s}$ and $2_{s}$. Returns 1, 2 or 0 (for draw).
+    \item[draw\_text] The function used to draw text on the screen using font.render on an image and screen.blit.
+    
+    \item[actual\_game] The function initializes the center four squares of the board to 1 and 2. Then in a while loop until \textit{game\_over} is True; it initialises Turn\_id and position (to (0,0)). It checks if a valid move exists and stores it into \textit{has\_move}. It calls potential\_moves (since at the end of previous iteration, the screen would have been reset.). \\
+    Now, inside the event loop, if event is QUIT, appropriate message is displayed. If \textit{has\_move} is False, we check if the other player can make a move. If no, game ends, checkWin is called and winner is declared. If yes, message for turn skip is put out and \textit{Turn\_id} is flipped so when it's flipped again at the end, we get the same id. Bottom panel is updated. When a mouse button is clicked, we check if the move is valid (via check\_if\_valid), update the board and the screen with the appropriate functions. A time delay is put for animation effect. If not, error message is put out. Success of move is stored in \textit{good\_game}. \\
+    If the \textit{good\_game} is true: the display at the bottom is flipped, \textit{move\_number} is incremented. If \textit{move\_number} is $m \times m$ then win condition is checked. The turn is switched. The function set\_screen and update\_after\_move are called to reset the board to remove the previous potential-move discs. 
+     
+\end{description}
+
 \subsection{Connect Four}
 \subsection{Menu Screens}
 \subsection{MatPlotLib Graphs}
 \subsection{Terminal Tables}
 
-\section{Directory Structure}
+This is implemented in leaderboard.sh via awk. The data from history.csv is stored in an array of arrays in the format [username, no. of wins, no. of losses, no. of draws]. Four such arrays are made, one for each game and one for all games combined. Via command line argument, the sorting factor is stored in the key. Arrays are initialised in BEGIN and sorting and printing is done in END. Following functions have been defined: 
+\begin{description}
+    \item[sort\_array] Bubble sort is implemented to sort the arrays according to the key passed to the function. All elements of the array are switched with a loop. In case of tie, the order remains the order of first appearance in history.csv \\ 
+    In the case of win/loss ratio, some wins and zero losses is considered infinity and zero win and zero losses is considered zero. Since infinity is not tolerated by awk, all dividing by zero cases are handled manually by if else conditions.
+
+    \item[add\_row\_to\_array] \textit{user} (the array) and \textit{i} (length of the array) are passed as arguments to the function. First, it checks the array if the username already exists and increments the respective index of the array. If it doesn't exist, a new row is created, corresponding field is incremented, and \textit{i} is incremented\footnote{Since \textit{i} is passed by value and pointers are not a thing in awk, the function returns the updated value of i and the function is called in this way: i = add\_row\_to\_array(users, i)}. This is done for both the columns (Player1 and Player2)
+
+    \item[printing] \textit{user} (the array) and \textit{i} (length of the array) are passed as arguments to the function. printf is used to format. If else conditions are used to handle division by zero manually.
+    
+    
+\end{description}
+
+
 
 \section{Installation \& Setup}
 
+\subsection{External libraries}
+Three external libraries are used in the project — Numpy, MatPlotLib and Pygame-ce. These can be installed by running ``pip install \{name of library\} in the terminal. 
+\subsection {Possible VSCode installations} 
+Git Bash terminal environment may have to be installed in VSCode. \\ 
+pdflatex may have to be installed in VSCode. \\
+PDF reader may have to be installed in VSCode. \\
+
 \section{Usage}
 
-\section{Retrospection}
+Open the directory hub in the project repository. Run 
+\begin{center} {bash main.sh}
+\end{center}
+in the terminal. Ahead of that, terminal outputs and GUI has directions on what to do next. \\ 
+\begin{enumerate}
+    \item Input r in terminal. (Vimes, copper) and (Vetinari, brain) are two valid (username, password) pairs. 
+    \item Click on the game you want to play.
+    \item Click anywhere in the box you want to make a move in. 
+    \item Once game ends, select whichever factor you want the tables to be sorted by. 
+    \item Select replay or quit according to your wish.
+\end{enumerate}
+
+\section{Retrospection} 
+\subsection {Challenges Faced} 
+\begin{enumerate}
+    \item Removing the potential move discs in othello was difficult. I (Alice) tried making a separate layer of screen with only the potential discs to update only it every turn but that didn't work. Now the screen resets every turn which causes a slight flicker after every move in slow machines.
+    \item Debugging specific cases (like no possible moves) in othello was hard even when no. of boxes is reduced to minimum possible - often I (Alice) was just playing the game randomly until I hit up the buggy area.  
+    \item Shifting from regular code to class based code was annoying because we kept missing self.(  ) in front of things and that kept giving error. 
+    \item I (Anisha) couldn't figure out how to handle turn switching when user clicks on filled cell. Because of that I introduced \textit{good\_game} so turn switching only happens if successful move is made. 
+    \item base\_class was initially supposed to be in game.py . game.py imported the games - so that they could be called. The games had to import game.py in order to inherit from the base\_class. This caused
+    a circular import error. This was fixed by putting base\_class in a seperate 
+    file.
+    \item Initially the 4 MatPlotLib charts were put in the same plot as subplots. This caused a lot of issues due to misalignment and the plots 
+    were very unorganized. I (Anisha) fixed this by generating each plot separately and blitting them individually.
+    \item Regex characters in password (in authentication) broke the grep until I (Alice) eventually got the correct sed command to escape such characters.
+    \item I (Alice) didn't know premade function for hashing were allowed to be used so I spent quite a lot of time understand how SHA256 works before thinking this might be too difficult to implement in bash and asking.
+    
+\end{enumerate}
+\subsection{Given more time} 
+Some features that could be implemented we had more time:
+\begin{enumerate}
+    \item Password masking. It involves taking password one character at a time, printing \* and appending each character to the password variable. 
+    \item Faded circles/crosses when the mouse hovers over a box. 
+    \item Fairer sorting in leaderboard table instead of just order of appending for tie breakers. 
+\end{enumerate}
+
 
 \section{References}
 

@@ -9,4 +9,4 @@ report.pdf: report.tex report.bib
 
 .PHONY: clean
 clean: 
-	rm -f *.aux *.log *.bbl *.blg *.toc *.out
+	rm -f *.aux *.log *.bbl *.blg *.toc *.out *.txt

@@ -1,6 +1,8 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx} 
 \usepackage{dirtree}
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{report.bib}
 
 \title{Mini Game Hub \LaTeX{}  Report}
 \author{Alice Patel \\
@@ -148,6 +150,19 @@ Authentication is implemented entirely in main.sh. \\
 
 
 \subsection {Tic-Tac-Toe}
+
+The game opens with a welcome message stating who goes first. A grid is visible in the background. The game has the following features:
+
+\begin{description} 
+\item[Visual] The board has a floral background, X's and O's . A panel at the bottom keeps track of whose turn it is.
+\item[Moves] If a move is made(by clicking), a X or O is drawn on the screen depending on whose turn it is.
+\item[Errors] If user clicks on a box that is already occupied, a alert window with corresponding message appears.
+\item[Highlighted win] If a player wins, the match is highlighted. A gap of 1 second is given before the winner is announced.
+\item[Draw] If it's a draw, a message announcing the same is shown. 
+\item [Exit] A player can quit by clicking the close button at any time(it exits with a message). 
+
+\end{description}
+
 \subsection{Othello}
 
 The game opens with a short introduction of Othello and who goes first in a message box. A screen with Othello board is visible in the background. The game has the following features:
@@ -159,12 +174,47 @@ The game opens with a short introduction of Othello and who goes first in a mess
 \item [Exit] When the board is filled or neither player can make any more moves, the game ends and the winner is declared via message box. At any point, if cross is clicked, the game exits with a message box.
 
 \end{description}
+
 \subsection{Connect Four}
+
+The game opens with a welcome message stating who goes first. A grid is visible in the background. The game has the following features:
+
+\begin{description} 
+\item[Visual] The board has a floral background, blue and purple discs. A panel at the bottom keeps track of whose turn it is.
+\item[Moves] If a move is made(by clicking), a purple disk or a blue disk is drawn on the screen depending on whose turn it is.
+\item[Errors] If user clicks on a cell that is already occupied, a alert window with corresponding message appears.
+\item[Highlighted win] If a player wins, the match is highlighted. A gap of 1 second is given before the winner is announced.
+\item[Draw] If it's a draw, a message announcing the same is shown. 
+\item [Exit] A player can quit by clicking the close button at any time(it exits with a message). 
+
+\end{description}
+
 \subsection{Menu Screens}
+
+4 major screens:
+
+\begin{description} 
+\item[Welcome Menu] A menu is presented, a person can choose the game they wish to play by clicking anywhere in the area given for the game.
+\item[Sort Menu] 5 choices - wins, losses, draws, win/loss ratio, total. Players can pick any factor, and sort history.csv by it.
+\item[Matplotlib charts] Shows pie chart of games played by frequency, top 5 players by win count, wins,losses,draws of player1 and player2.
+\item[Prompt to quit] replays if the player picks replay, quits if the player picks quit.
+
+
+\end{description}
+
 \subsection{MatPlotLib Graphs}
+
+There are 4 graphs:
+
+\begin{description} 
+\item[pie chart] It is a pie chart showing the games played(othello, connect4, tictactoe) by frequency.
+\item[Winner bar graph] Bar graph showing the top 5 players by win count. 
+\item[player1 stats] Shows a bar graph of wins,loss,draw count of playe1.
+\item[player2 stats] Shows a bar graph of wins,loss,draw count of player2.
+\end{description}
+
 \subsection{Terminal Tables}
 
- 
 Four tables are made in the terminal; one for each game and one for total statistics of all games. They are sorted by whatever the user selected in the previous python menu. All of them have six columns- usernames, Total played, wins, losses, draws and ratio of win to losses. \footnote{In case of a tie, table is drawn in the order of appending. Except if the sorting parameter is win/loss ratio, in which tables are sorted as fairly as possible.}
 
 
@@ -243,7 +293,7 @@ PDF reader may have to be installed in VSCode. \\
 
 \section{Usage}
 
-Open the directory hub in the project repository. Run 
+Open the directory hub in the project repository(make sure pwd is hub). Run 
 \begin{center} {bash main.sh}
 \end{center}
 in the terminal. Ahead of that, terminal outputs and GUI has directions on what to do next. \\ 
@@ -279,9 +329,7 @@ Some features that could be implemented we had more time:
     \item Fairer sorting in leaderboard table instead of just order of appending for tie breakers. 
 \end{enumerate}
 
-
-\section{References}
-
-
+\nocite{*}
+\printbibliography 
 
 \end{document}

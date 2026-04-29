@@ -16,64 +16,36 @@ Anisha Dash }
 \maketitle
 
 \tableofcontents
-\clearpage
 
 \section{Libraries used}
 
 \subsection{External libraries}
 
-\subsubsection{pygame}
-pygame is the main library in the gameplay. It allows a GUI - players can click and choose.
+\textbf{pygame} is the main library in the gameplay. It allows a GUI, designing of the game screens. 
+It is imported in \textbf{game.py,} \textbf{connect4.py,} \textbf{othello.py,} \textbf{tictactoe.py}, \textbf{screen\_interfaces.py,} \textbf{designs\_connect4.py,} \textbf{designs\_tictactoe.py}. 
 
-\noindent It is imported for this reason in 
+\noindent \textbf{matplotlib} is used to visualize some stats like - pie chart of games played by frequency.
+It is imported in \textbf{matplotlib\_plots.py}.
 
-\noindent \textbf{game.py,} \textbf{connect4.py,} \textbf{othello.py,} \textbf{tictactoe.py}.
-
-\noindent pygame is used for the designing of the game screens - like drawing circles and crosses, setting backgrounds for different games, showing the menu's.
-
-\noindent It is imported for this reason in 
-
-\noindent \textbf{screen\_interfaces.py,} \textbf{designs\_connect4.py,} \textbf{designs\_tictactoe.py}
-
-\subsubsection{numpy}
-numpy is the main library used for the logic of the gameplay. Numpy is used to initialize the gameboard, np.lib.stride\_tricks.sliding\_window\_view is used to check for win condition, numpy is used for matplotlib charts generation.
-
-\noindent It is imported in 
-
-\noindent \textbf{handling\_history\_csv.py,} \textbf{matplotlib\_plots.py,} \textbf{base\_class.py}. 
-
-\subsubsection{matplotlib}
-matplotlib is used to visualize some stats like - pie chart of games played by frequency, top 5 players by win count, stats of player1, stats of player2
-
-\noindent It is imported in \textbf{matplotlib\_plots.py}
+\noindent \textbf{numpy} is the main library used for the logic of the gameplay, used for functions like initializing the gameboard, checking for win condition.
+It is imported in \textbf{handling\_history\_csv.py,} \textbf{matplotlib\_plots.py,} \textbf{base\_class.py}. 
 
 \subsection{Standard libraries}
 
-\subsubsection{sys}
-sys allows a clean exit from the pygame window if the close button is clicked.
+\textbf{sys} allows a clean exit from the pygame window.
+It is imported in \textbf{game.py}, \textbf{connect4.py, othello.py, tictactoe.py}.
 
-\noindent It is imported in \textbf{game.py}, \textbf{connect4.py, othello.py, tictactoe.py}.
+\noindent \textbf{subprocess} is used to run - bash leaderboard.sh [argument] through python. 
+It is imported in \textbf{game.py}.
 
-\subsubsection{subprocess}
-subprocess is used to run - bash leaderboard.sh [argument] through python. This is used to print a leaderboard sorted by the argument - [argument].
+\noindent \textbf{csv} is used to handle history.csv
+it is imported in \textbf{handling\_history\_csv.py}
 
-\noindent It is imported in \textbf{game.py}.
+\noindent \textbf{datetime} is used while appending the results of a game(including date) to history.csv. 
+It is imported in  \textbf{handling\_history\_csv.py}.
 
-\subsubsection{csv}
-csv is used to handle history.csv . csv reader object is used to load each row as an array, csv writer object is used to append the game results to history.csv .
-
-\noindent It is imported in  \textbf{handling\_history\_csv.py}
-
-\subsubsection{datetime}
-datetime is used while appending the results of a game(including date) to history.csv.
-
-\noindent It is imported in  \textbf{handling\_history\_csv.py}.
-
-\subsubsection{collections}
-collections.counter is used to count the number of occurences of an element in an array. This is used to count the number of wins/losses/draws of a player which is inturn used for plotting.
-
-\noindent It is imported in  \textbf{matplotlib\_plots.py}.
-\clearpage
+\noindent \textbf{collections} is used to count the number of wins/losses/draws of a player.
+It is imported in  \textbf{matplotlib\_plots.py}.
 
 \section{Directory Structure}
 
@@ -140,52 +112,33 @@ collections.counter is used to count the number of occurences of an element in a
   \item[report] This folder stores \textbf{report.tex, report.pdf, report.bib and Makefile}
 \end{description}
 
-\clearpage
-
 \section {Features Included}
 \subsection {Authentication}
 
 Authentication is implemented entirely in main.sh. \\
-\indent It gives choice between login or make a new account in the beginning. All inputs are handled with terminal prompts, e.g. ``Username does not exist", ``Either username or password are incorrect", etc. During login, only if username and password match for both players, the process is considered successful and the game launches.
+\indent It gives choice between login or make a new account in the beginning. All inputs are handled with terminal prompts, e.g. "Username does not exist", "Either username or password are incorrect", etc. During login, only if username and password match for both players, the process is considered successful and the game launches.
 
 
-\subsection {Tic-Tac-Toe}
+\subsection {Tic-Tac-Toe and Connect Four}
 
 The game opens with a welcome message stating who goes first. A grid is visible in the background. The game has the following features:
 
 \begin{description} 
-\item[Visual] The board has a floral background, X's and O's . A panel at the bottom keeps track of whose turn it is.
-\item[Moves] If a move is made(by clicking), a X or O is drawn on the screen depending on whose turn it is.
-\item[Errors] If user clicks on a box that is already occupied, a alert window with corresponding message appears.
-\item[Highlighted win] If a player wins, the match is highlighted. A gap of 1 second is given before the winner is announced.
-\item[Draw] If it's a draw, a message announcing the same is shown. 
-\item [Exit] A player can quit by clicking the close button at any time(it exits with a message). 
+\item[Visual] The board has a floral background, X's and O's or discs. A panel at the bottom keeps track of whose turn it is.
+\item[Moves] If a move is made(by clicking), an X or O or or a disc is drawn on the screen depending on whose turn it is.
+\item[Messages] When user clicks on a box that is already occupied or the game ends or a player quits by clicking the close button a message box with appropriate message appears.
+\item[Highlighted win] If a player wins, the match is highlighted. A gap of 1 second is given before the winner is announced.  
 
 \end{description}
 
 \subsection{Othello}
 
-The game opens with a short introduction of Othello and who goes first in a message box. A screen with Othello board is visible in the background. The game has the following features:
-\begin{description} 
-\item[Visual] The board has a floral background, white grid, blue and purple discs and small grey discs where potential moves can be made. A panel at the bottom keeps track of whose turn it is.
-\item[Moves] Once a move is made, the discs that are supposed to flip change color with a short time delay, giving the impression of flipping. The old potential-move discs disappear and new discs appear. 
-\item[Errors] If user clicks on a box that is already occupied, or on an empty box, a message window with corresponding message appears.
-\item[No valid move] If a player can make no valid move, their turn is skipped. This is informed via a message box. 
-\item [Exit] When the board is filled or neither player can make any more moves, the game ends and the winner is declared via message box. At any point, if cross is clicked, the game exits with a message box.
-
-\end{description}
-
-\subsection{Connect Four}
-
 The game opens with a welcome message stating who goes first. A grid is visible in the background. The game has the following features:
-
 \begin{description} 
-\item[Visual] The board has a floral background, blue and purple discs. A panel at the bottom keeps track of whose turn it is.
-\item[Moves] If a move is made(by clicking), a purple disk or a blue disk is drawn on the screen depending on whose turn it is.
-\item[Errors] If user clicks on a cell that is already occupied, a alert window with corresponding message appears.
-\item[Highlighted win] If a player wins, the match is highlighted. A gap of 1 second is given before the winner is announced.
-\item[Draw] If it's a draw, a message announcing the same is shown. 
-\item [Exit] A player can quit by clicking the close button at any time(it exits with a message). 
+\item[Visual] The board has a floral background, regular discs and small grey discs where potential moves can be made. A panel at the bottom keeps track of whose turn it is.
+\item[Moves] Once a move is made, the discs that are supposed to flip change color with a short time delay, giving the impression of flipping. The old potential-move discs disappear and new discs appear. 
+\item[Errors] If user clicks on a box that is already occupied, or on an empty box, or a player can make no valid move, a message window with corresponding message appears. 
+\item [Exit] When the board is filled or neither player can make any more moves, the game ends and the winner is declared via message box. At any point, if cross is clicked, the game exits with a message box.
 
 \end{description}
 
@@ -195,8 +148,7 @@ The game opens with a welcome message stating who goes first. A grid is visible 
 
 \begin{description} 
 \item[Welcome Menu] A menu is presented, a person can choose the game they wish to play by clicking anywhere in the area given for the game.
-\item[Sort Menu] 5 choices - wins, losses, draws, win/loss ratio, total. Players can pick any factor, and sort history.csv by it.
-\item[Matplotlib charts] Shows pie chart of games played by frequency, top 5 players by win count, wins,losses,draws of player1 and player2.
+\item[Sort Menu] 5 choices - wins, losses, draws, win/loss ratio, total. Players can pick any factor.
 \item[Prompt to quit] replays if the player picks replay, quits if the player picks quit.
 
 
@@ -217,10 +169,9 @@ There are 4 graphs:
 
 Four tables are made in the terminal; one for each game and one for total statistics of all games. They are sorted by whatever the user selected in the previous python menu. All of them have six columns- usernames, Total played, wins, losses, draws and ratio of win to losses. \footnote{In case of a tie, table is drawn in the order of appending. Except if the sorting parameter is win/loss ratio, in which tables are sorted as fairly as possible.}
 
+\section{Implementation \& Code logic}
 
-\section{Implementation}
 \subsection {Authentication}
-
 
 The following functions are used in the program: 
 \begin{description}
@@ -239,35 +190,81 @@ Else it outputs ``No account exists." and asks whether they want to make a new a
 \indent game.py is launched at the end if both keys are `s' with \textit{player1} and \textit{player2} as arguments. In case of any errors, the keys aren't `s' and this block isn't entered and the program just quits. 
 
 
-\subsection {Tic-Tac-Toe}
-\subsection{Othello}
-The following functions are used in the program (defined within the othello class):
+\subsection {Functions common to all 3 games}
+The following functions are common to tictactoe.py othello.py connect4.py:
 \begin{description}
-    \item[Constructor] This sets up the screen and variables like \textit{size}, \textit{move\_number} (no. of discs on the board), \textit{length} (length of a box), etc. It calls the functions self.welcome() and self.set\_screen(). 
-    \item[welcome] This sets up the welcome message, with background added with screen.blit and grid drew on with pygame. A short introduction is made with a message box.
-    \item[set\_screen] This prints the background image on the screen, draws grid (with pygame.draw.line) and draws the four circles in the center (with pygame.draw.aacircle). It also draws the black strip at the bottom for turn tracking.
+    \item[Constructor] This sets up the screen and variables like \textit{size}, \textit{move\_number} (no. of discs on the board), \textit{length} (length of a cell), etc. It calls the functions self.welcome() and self.set\_screen(). 
+    \item[welcome] This sets up the welcome message, with background added with screen.blit and grid drawn on with pygame. A short introduction is made with a message box. (design functions are put in seperate files for connect4 and tictactoe design\_connect4, design\_tictactoe).
+    \item[set\_screen] This prints the background image on the screen, draws grid (with pygame.draw.line) and draws the four circles in the center for othello (with pygame.draw.aacircle). It also draws the black panel at the bottom for turn tracking.
+    \item[Game] Checks if a box is empty and updates the screen to draw a circle/X/O in that box. This does not ensure if the move is valid according to the rules of Othello but it does for connect4, tictactoe. Returns True or False based on if the box is empty or not. 
+    \item[update\_display] Draws a circle/X/O at the given position and color according to \textit{Turn\_id}. Does not touch \textit{board}.
+    \item[verify] Checks if a box at the given row and column is empty(checks if column is not full for connect4), returns True or False.
+    \item[draw\_text] The function used to draw text on the screen using font.render on an image and screen.blit.
+    \item[switch\_player] This functions is used to change users in tictactoe, connect4 -  othello has different logic
+    \item[actual\_game] The function initializes the numpy board accordingly. Then in a while loop until \textit{game\_over} is True; it initialises Turn\_id and position (to (0,0)). 
+    Now, inside the event loop, if event is QUIT, appropriate message is displayed.. When a mouse button is clicked, we check if the move is valid, update the board and the screen with the appropriate functions. If not, error message is put out. Success of move is stored in \textit{good\_game}. There is a checkwin function immediately after to see if there is a win.  
+    If the \textit{good\_game} is true: the display at the bottom is flipped, \textit{move\_number} is incremented. If \textit{move\_number} is $m \times m$ then it's a draw(in case of connect4, tictactoe). The turn is switched.  
+     
+\end{description}
+
+\subsection{Tic-Tac-Toe}
+\begin{description}
+    \item[highlight] In case of a win, the winning match is highlighted. 
+\end{description}
+
+\subsection{Othello}
+The following functions are used in the program that are unique to othello (defined within the othello class):
+\begin{description}
     \item[valid\_move\_exist] This loops through boxes of the entire board and checks if the player with id \textit{Turn\_id} can make a move in a specific box (using valid\_move\_exist) and returns True or False according to whether they can make a move anywhere.
     \item[potential\_moves] Loops through boxes of the entire board and draws a small grey circle where a valid move can made by the player with id \textit{Turn\_id}.
     \item[check\_if\_valid] It checks if a move is valid. \textit{direction} stores the eight directions along which a series of flips can happen. Suppose the disc placed is blue. It moves along all eight directions (incrementing i using a while loop) as long as the discs are purple. If the ith disc is not purple, we check if the ith disc is blue or blank. If it's blue and i is not one (i.e. two consecutive blues) \textit{change} is incremented. After all eight directions are thus processed, \textit{change} is returned as the number of discs flipped if this move is made. 
     \item[update\_board] Runs a similar process as check\_if\_valid and updates the numpy array \textit{board} with the flipped values (1 is for Player1's disc, 2 is for Player2's disc and 0 is for empty box). This does not update the screen, only the array. 
-    \item[Game] Checks if a box is empty and updates the screen to draw a circle in that box. This does not ensure if the move is valid according to the rules of Othello. Returns True or False based on if the box is empty or not. 
-    \item[update\_display] Draws a circle at the given position and color according to \textit{Turn\_id}. Does not touch \textit{board}.
-    \item[verify] Checks if a box at the given row and column is empty, returns True or False.
     \item[update\_after\_move] Loops through the numpy array and draws discs on the screen according to it. Draws the bottom strip and the text on it. Essentially sets up the discs on the screen anew. 
-    \item[checkWin] Makes two boolean matrix of places where the value in \textit{board} is 1 and 2. This is used as an index for an $m \times m$ matrix which is flattened and measured to find the number of $1_{s}$ and $2_{s}$. Returns 1, 2 or 0 (for draw).
-    \item[draw\_text] The function used to draw text on the screen using font.render on an image and screen.blit.
-    
-    \item[actual\_game] The function initializes the center four squares of the board to 1 and 2. Then in a while loop until \textit{game\_over} is True; it initialises Turn\_id and position (to (0,0)). It checks if a valid move exists and stores it into \textit{has\_move}. It calls potential\_moves (since at the end of previous iteration, the screen would have been reset.). \\
-    Now, inside the event loop, if event is QUIT, appropriate message is displayed. If \textit{has\_move} is False, we check if the other player can make a move. If no, game ends, checkWin is called and winner is declared. If yes, message for turn skip is put out and \textit{Turn\_id} is flipped so when it's flipped again at the end, we get the same id. Bottom panel is updated. When a mouse button is clicked, we check if the move is valid (via check\_if\_valid), update the board and the screen with the appropriate functions. A time delay is put for animation effect. If not, error message is put out. Success of move is stored in \textit{good\_game}. \\
-    If the \textit{good\_game} is true: the display at the bottom is flipped, \textit{move\_number} is incremented. If \textit{move\_number} is $m \times m$ then win condition is checked. The turn is switched. The function set\_screen and update\_after\_move are called to reset the board to remove the previous potential-move discs. 
+    \item[checkWin] (different from the common condition) Makes two boolean matrix of places where the value in \textit{board} is 1 and 2. This is used as an index for an $m \times m$ matrix which is flattened and measured to find the number of $1_{s}$ and $2_{s}$. Returns 1, 2 or 0 (for draw).    
+    \item[actual\_game] A few parts are different. In the while loop, It checks if a valid move exists and stores it into \textit{has\_move}. It calls potential\_moves (since at the end of previous iteration, the screen would have been reset.). 
+    If \textit{has\_move} is False, we check if the other player can make a move. If no, game ends, checkWin is called and winner is declared. If yes, message for turn skip is put out and \textit{Turn\_id} is flipped so when it's flipped again at the end, we get the same id. when move is valid, A time delay is put for animation effect.
+    If \textit{move\_number} is $m \times m$ then win condition is checked. The turn is switched. The function set\_screen and update\_after\_move are called to reset the board to remove the previous potential-move discs. 
      
 \end{description}
 
-\subsection{Connect Four}
-\subsection{Menu Screens}
-\subsection{MatPlotLib Graphs}
-\subsection{Terminal Tables}
+\subsection{connect4}
+\begin{description}
+    \item[highlight] In case of a win, the winning match is highlighted. 
+\end{description}
 
+\subsection{game.py functions}
+\begin{description}
+    \item[game class] Has 4 functions game(),sort(),plots(),final\_screen().
+    \item[game()] calls menu() design from screen\_interfaces that set the background, and launches the game that is clicked (using mousebuttondown) and returns game results.
+    \item[sort()] calls sort\_by\_what() design from screen\_interfaces that set the background, sorts history.csv(calls leaderboard.sh) by the parameter that is clicked and prints it on terminal.
+    \item[plots()] calls picture() from screen\_interfaces that loads images stored in plot\_pictures and blits them on the screen. Option of click to continue(by pygame.mousebuttondown).
+    \item[final\_screen()] calls prompt\_to\_quit() from screen\_interfaces that designs the background. Allows to quit or replay by clicking (using mousebuttondown).
+\end{description}
+
+\subsection{matplotlib\_plots.py}
+\begin{description}
+    \item[init() function] initializes arrays, dictionaries used for plotting by using load\_history() from handling\_history\_csv.
+    \item[charts()] makes the respective matplotlib charts and saves them in png form in plot\_pictures.
+    \item[pie\_chart\_arrays()] uses collections.counter to return number of times a game is played and returns the respective arrays.
+    \item[sorted\_win\_lists()] uses collections.counter and returns list with win count.
+    \item[player1\_lists()] returns respective lists including stats of player1.
+    \item[player2\_lists()] returns respective lists including stats of player2.
+\end{description}
+
+\subsection{handling\_history\_csv.py}
+\begin{description}
+    \item[load\_history()] parses through csv file and returns an array with each row as an array.
+    \item[append\_history()] appends row to history.csv with player1,win status, player2, win status, date, game name
+\end{description}
+
+\subsection{base\_class.py}
+\begin{description}
+    \item[init()] Initializes variables inherited by the games.
+    \item[check\_win()] checks win condition using numpy functions.Calls 4 functions to check in vertical,horizonal,right diagonal, left diagonal
+    \item[switch\_player()] method to switch players that is inherited
+\end{description}
+
+\subsection{Terminal Tables}
 This is implemented in leaderboard.sh via awk. The data from history.csv is stored in an array of arrays in the format [username, no. of wins, no. of losses, no. of draws]. Four such arrays are made, one for each game and one for all games combined. Via command line argument, the sorting factor is stored in the key. Arrays are initialised in BEGIN and sorting and printing is done in END. Following functions have been defined: 
 \begin{description}
     \item[sort\_array] Bubble sort is implemented to sort the arrays according to the key passed to the function. All elements of the array are switched with a loop. In case of tie, the order remains the order of first appearance in history.csv \\ 
@@ -280,8 +277,6 @@ This is implemented in leaderboard.sh via awk. The data from history.csv is stor
     
 \end{description}
 
-
-
 \section{Installation \& Setup}
 
 \subsection{External libraries}
@@ -293,10 +288,8 @@ PDF reader may have to be installed in VSCode. \\
 
 \section{Usage}
 
-Open the directory hub in the project repository(make sure pwd is hub). Run 
-\begin{center} {bash main.sh}
-\end{center}
-in the terminal. Ahead of that, terminal outputs and GUI has directions on what to do next. \\ 
+Open the directory hub in the project repository(make sure pwd is hub). Run "bash main.sh"
+in the terminal. Ahead of that, terminal outputs and GUI has directions on what to do next.
 \begin{enumerate}
     \item Input r in terminal. (Vimes, copper) and (Vetinari, brain) are two valid (username, password) pairs. 
     \item Click on the game you want to play.

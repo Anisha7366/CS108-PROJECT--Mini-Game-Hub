@@ -18,6 +18,7 @@ class base:
         # initializes the numpy board
         self.board=np.zeros((self.m,self.m))
     
+    # method to switch players that is inherited
     def switch_player(self):
         if self.Turn==self.player1:
             self.Turn=self.player2
@@ -26,27 +27,36 @@ class base:
         else:
             self.Turn=self.player1
             self.Turn_id=1
-    
+        
+    # this function calls 4 functions that check if there is a win condition and return True/False
     def checkWin(self,indices):
         # checks win 
         if self.Horizontal(indices) or self.Vertical(indices) or self.Diagonal_right(indices) or self.Diagonal_left(indices):
             return True
 
         return False
-
+    
+    # to check for a horizontal match
     def Horizontal(self,indices):
 
+        # This is an array with True at positions where it is Turn_id false otherwise
         player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
+        # np.lib.stride_tricks.sliding_window_view returns windows(changing memory) that scan through the array
+        # axis = 1 for this case because array is 2D and we need access only at the 2nd dimension(inside an element which is an array)
+        # window is an 1D array of length n
         windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,),axis=1)
 
+        # check_horizontal returns a m-n + 1 x m array of bools with value of windows is a horizontal match 
         check_horizontal=np.all(windows,axis=2)
 
+        # if any element of check_horizontal is true, return the index of element , append the n indices to indices (for highlighting win) return True
         if(np.any(check_horizontal)):
             row,col=np.where(check_horizontal==True)[0][0],np.where(check_horizontal==True)[1][0]
             self.Append(indices,row,col,'h')
             return True
         
+        # else return True
         return False
         
 
@@ -70,14 +80,19 @@ class base:
             
         return False
 
+    # to check for a vertical match
     def Vertical(self,indices):
 
         player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
+        # axis != 1 for this case because array is 2D and we need access at both dimensions
+        # window is an 3D array 
         windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,1))
 
+        # check_vertical returns a m x m -n + 1 array of bools with value of windows is a vertical match 
         check_vertical=np.all(windows,axis=2)
 
+        # if any element of check_vertical is true, return the index of element , append the n indices to indices (for highlighting win) return True
         if(np.any(check_vertical)):
             row,col=np.where(check_vertical==True)[0][0],np.where(check_vertical==True)[1][0]
             self.Append(indices,row,col,'v')
@@ -85,16 +100,21 @@ class base:
         
         return False
 
+    # to check for a right diagonal \ match
     def Diagonal_right(self,indices):
 
+        # axis != 1 for this case because array is 2D and we need access at both dimensions
+        # window is an 3D array 
         player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
         windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,self.n))
 
         compare=np.full((1,self.n),True)
 
+        # check_vertical returns a m -n + 1 x m -n + 1 array of bools with value of windows is a right diagonal match (diagonals match)
         check_diagonal=np.all(windows.diagonal(axis1=2,axis2=3)==compare,axis=2)
 
+        # if any element of check_diagonal is true, return the index of element , append the n indices to indices (for highlighting win) return True
         if(np.any(check_diagonal)):
             row,col=np.where(check_diagonal==True)[0][0],np.where(check_diagonal==True)[1][0]
             self.Append(indices,row,col,'rd')
@@ -102,16 +122,21 @@ class base:
         
         return False
     
+    # to check for a left diagonal / match
     def Diagonal_left(self,indices):
-
+        
+        # axis != 1 for this case because array is 2D and we need access at both dimensions
+        # window is an 3D array 
         player_positions=(self.board==np.full((self.m,self.m),self.Turn_id))
 
         windows=np.lib.stride_tricks.sliding_window_view(player_positions,window_shape=(self.n,self.n))
 
+        # check_vertical returns a m -n + 1 x m -n + 1 array of bools with value of windows is a left diagonal match (diagonals match)
         compare=np.full((1,self.n),True)
 
         check_diagonal=np.all(np.flip(windows,axis=3).diagonal(axis1=2,axis2=3)==compare,axis=2)
 
+        # if any element of check_diagonal is true, return the index of element , append the n indices to indices (for highlighting win) return True
         if(np.any(check_diagonal)):
             row,col=np.where(check_diagonal==True)[0][0],np.where(check_diagonal==True)[1][0]
             self.Append(indices,row,col,'ld')
@@ -119,6 +144,7 @@ class base:
         
         return False
     
+    # appends the winning indices to indices so that the respective cells can be highlighted in the pygame window
     def Append(self,indices,row,col,parameter):
         if(parameter=='h'):
             for i in range(self.n):
@@ -131,7 +157,7 @@ class base:
                 indices.append((row+i,col+i))
         elif(parameter=='ld'):
             for i in range(self.n):
-                indices.append((row+i,col+4-i))
+                indices.append((row+i,col+self.n-1-i))
         return
 
 # issue faced - circular import

@@ -25,11 +25,11 @@ class othello(base):
    
 
         # sets the display
-        self.screen=pygame.display.set_mode((self.size[0],self.size[1]+50))
+        self.screen=pygame.display.set_mode((self.size[0],self.size[1]*14/13))
 
         pygame.display.set_caption("Othello")
 
-        self.font=pygame.font.SysFont('candara',30,bold=False,italic=False)
+        self.font=pygame.font.SysFont('candara',int(3*self.size[0]/65),bold=False,italic=False)
         # just a welcome message
         self.welcome()
         
@@ -45,7 +45,7 @@ class othello(base):
     
 
         # Shows whose turn it is at the bottom
-        self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+        self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
         pygame.display.flip()
 
 
@@ -55,8 +55,8 @@ class othello(base):
         scaled_back = pygame.transform.smoothscale(back, (self.size[0], self.size[1]))
         self.screen.blit(scaled_back,(0,0))
 
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
-        self.draw_text(f"Othello",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/13])
+        self.draw_text(f"Othello",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
 
         pygame.display.flip() 
 
@@ -82,12 +82,12 @@ class othello(base):
         pygame.draw.line(self.screen,(255,255,255),(self.size[0]-1,0),(self.size[0]-1,self.size[1]),width=2)
 
         length = (self.size[0]+self.size[1])/(4*self.m)
-        pygame.draw.aacircle(self.screen, (0, 0, 204), (self.size[0]/2 - length, self.size[1]/2 - length), length-15)
-        pygame.draw.aacircle(self.screen, (0, 0, 204), (self.size[0]/2 + length, self.size[1]/2 + length), length-15)
-        pygame.draw.aacircle(self.screen, (255,51,255), (self.size[0]/2 - length, self.size[1]/2 + length), length-15)
-        pygame.draw.aacircle(self.screen, (255,51,255), (self.size[0]/2 + length, self.size[1]/2 - length), length-15)
+        pygame.draw.aacircle(self.screen, (0, 0, 204), (self.size[0]/2 - length, self.size[1]/2 - length), length-15*self.size[0]/650)
+        pygame.draw.aacircle(self.screen, (0, 0, 204), (self.size[0]/2 + length, self.size[1]/2 + length), length-15*self.size[0]/650)
+        pygame.draw.aacircle(self.screen, (255,51,255), (self.size[0]/2 - length, self.size[1]/2 + length), length-15*self.size[0]/650)
+        pygame.draw.aacircle(self.screen, (255,51,255), (self.size[0]/2 + length, self.size[1]/2 - length), length-15*self.size[0]/650)
 
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/13])
 
         pygame.display.flip()
 
@@ -152,7 +152,7 @@ class othello(base):
 
                         pygame.display.message_box("Oh no!", f"{self.Turn} has no valid move! Your move is skipped :(","warn",None,('OK',),0,None)
 
-                        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+                        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/13])
 
 
                         #switching turns here so when switching happens at the end, we end up with the same player as before
@@ -164,10 +164,10 @@ class othello(base):
 
 
                         if self.Turn==self.player2:
-                            self.draw_text(f"{self.player2} (purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+                            self.draw_text(f"{self.player2} (purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
                         
                         else:
-                            self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+                            self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
 
                         pygame.display.flip()
                         
@@ -201,13 +201,13 @@ class othello(base):
                     #I noticed as the verify function returned false, the turns switched even when the return value was false(so no O printed but the turn now became X) (2 X's in a row) so this is to ensure the turn remained the same
                     if good_game:
                         
-                        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+                        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/13])
 
                         if self.Turn==self.player2:
-                            self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+                            self.draw_text(f"{self.player1} (blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
                         
                         else:
-                            self.draw_text(f"{self.player2} (purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+                            self.draw_text(f"{self.player2} (purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/13)
 
                         pygame.display.flip()
 
@@ -280,7 +280,7 @@ class othello(base):
 
             if(self.board[i] == 0):
                 if self.check_if_valid(position, Turn_id) > 0:
-                    pygame.draw.aacircle(self.screen, (64,64,64), (x,y), self.length-30)   
+                    pygame.draw.aacircle(self.screen, (64,64,64), (x,y), self.length-3*self.size[0]/65)   
                         
         pygame.display.flip()  
 
@@ -383,9 +383,9 @@ class othello(base):
     
 
         if Turn_id==1:
-            pygame.draw.aacircle(self.screen,(0,0,204),position,self.length-15)
+            pygame.draw.aacircle(self.screen,(0,0,204),position,self.length-15*self.size[0]/650)
         else:
-            pygame.draw.aacircle(self.screen,(255,51,255),position,self.length-15)
+            pygame.draw.aacircle(self.screen,(255,51,255),position,self.length-15*self.size[0]/650)
         
         pygame.display.flip()
 
@@ -409,13 +409,13 @@ class othello(base):
             
 
         
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/13])
 
         if self.Turn==self.player2:
-            self.draw_text(f"{self.player2}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+            self.draw_text(f"{self.player2}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
                         
         else:
-            self.draw_text(f"{self.player1}(blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+            self.draw_text(f"{self.player1}(blue)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*self.size[0]/65)
 
 
         pygame.display.flip()

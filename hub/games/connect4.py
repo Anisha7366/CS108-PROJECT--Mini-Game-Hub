@@ -14,7 +14,8 @@ class connect4(base):
     def __init__(self,player1,player2,size,m,n):
         super().__init__(player1,player2,m,n)
 
-        self.backg=background()
+        # for backdround design , grid
+        self.backg=background(size)
 
         # This is for the actual_game function which uses a while loop
         self.game_over=False
@@ -23,11 +24,11 @@ class connect4(base):
         self.size=size
 
         # sets the display
-        self.screen=pygame.display.set_mode((self.size[0],self.size[1]+50))
+        self.screen=pygame.display.set_mode((self.size[0],self.size[1]*14/13))
 
         pygame.display.set_caption("Connect4")
 
-        self.font=pygame.font.SysFont('candara',30,bold=False,italic=False)
+        self.font=pygame.font.SysFont('candara',int(size[0]*3/65),bold=False,italic=False)
 
         # just a welcome message
         self.welcome()
@@ -43,7 +44,7 @@ class connect4(base):
 
         # Shows whose turn it is at the bottom
 
-        self.backg.draw_text(self.screen,f"{self.player1}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+30)
+        self.backg.draw_text(self.screen,f"{self.player1}(purple)'s turn",self.font,(255,255,255),self.size[0]/2,self.size[1]+3*size[0]/65)
         pygame.display.flip()
 
     # A function purely used for aesthetics
@@ -168,7 +169,7 @@ class connect4(base):
     # switch player inherited from parent class
     def switch_player(self):
         super().switch_player()
-        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],50])
+        pygame.draw.rect(self.screen,(0,0,0),rect=[0,self.size[1],self.size[0],self.size[0]/65])
 
         self.backg.switch_player(self.screen,self.size,self.Turn,self.player1,self.player2)
         pygame.display.flip()         

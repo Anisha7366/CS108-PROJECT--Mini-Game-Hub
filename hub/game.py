@@ -27,8 +27,8 @@ player1,player2=sys.argv[1],sys.argv[2]
 # size according to taste, most of the game is very scalable but some part of it is not
 size=(650,650)
 
-# sets the display, the +50 acts as a footer(where  different messages will be displayed throughout the game)
-screen=pygame.display.set_mode((size[0],size[1]+50))
+# sets the display, the +size/13 acts as a footer(where  different messages will be displayed throughout the game)
+screen=pygame.display.set_mode((size[0],size[1]*14/13))
 
 # sets pygame window name
 pygame.display.set_caption("May the odds be ever in your favor!")
@@ -38,7 +38,7 @@ class Gameplay:
 
     # making a screen object, this is used throughout to call the different displays
     def __init__(self):
-        self.screen_display=screens()
+        self.screen_display=screens(size)
 
     # This is the function that calls the menu and sets it up, according to choice calls the game and plays it
     def game(self):

@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, numpy as np
 pygame.init()
 
 # inherits the base class from base_class.py
@@ -86,6 +86,11 @@ class tictactoe(base):
                     #I noticed as the verify function returned false, the turns switched even when the return value was false(so no O printed but the turn now became X) (2 X's in a row) so this is to ensure the turn remained the same
                     # good_game is used to ensure there is no turn switch when an illegal move is performed(say clicking an already full column)
                     if good_game:
+                        prob=np.random.rand()
+
+                        if(prob<=0.2):
+                            self.ghost()
+
                         self.move_number+=1
 
                         # checkwin condition - This returns the winner to game.py
@@ -166,6 +171,29 @@ class tictactoe(base):
         self.backg.switch_player_tictactoe(self.screen,self.size,self.Turn,self.player1,self.player2)
         pygame.display.flip()
 
+    def ghost(self):
+        column,row=np.random.randint(1,11),np.random.randint(1,11)
+
+        while not self.verify(row,column):
+            column,row=np.random.randint(1,11),np.random.randint(1,11)
+
+        draw=np.random.randint(1,3)
+
+        cell=((column*self.size[0]/self.m)-(self.size[0]/(2*self.m)),(row*self.size[1]/self.m)-(self.size[1]/(2*self.m)))
+
+        self.board[row-1][column-1]=draw
+
+        length=(self.size[0]+self.size[1])/(4*self.m)
+
+        if draw==1:
+            pygame.draw.line(self.screen,(100,100,100),(cell[0]-length+9*self.size[0]/650,cell[1]-length+9*self.size[0]/650),(cell[0]+length-9*self.size[0]/650,cell[1]+length-9*self.size[0]/650),width=5)
+            pygame.draw.line(self.screen,(100,100,100),(cell[0]+length-9*self.size[0]/650,cell[1]-length+9*self.size[0]/650),(cell[0]-length+9*self.size[0]/650,cell[1]+length-9*self.size[0]/650),width=5)
+
+        else:
+            pygame.draw.aacircle(self.screen,(100,100,100),cell,length-self.size[0]/130,width=3)
+
+        pygame.display.flip()
+        
 #stupid mistake of doing turn==player 1 for switching turns so it didnt switch 
 #mentioning self in front of everything
 # i forgot to make game function return true

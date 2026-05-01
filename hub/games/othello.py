@@ -21,7 +21,8 @@ class othello(base):
 
         # size = size of pygame window
         self.size=size
-
+        #mines are hard coded
+        self.mine_coords = [[1,1], [2,2], [3,3], [4,4], [5,5]]
    
 
         # sets the display
@@ -99,8 +100,10 @@ class othello(base):
         self.board[self.m//2][self.m//2 - 1] = 2
         self.board[self.m//2 - 1][self.m//2] = 2
 
+        
 
-
+        
+        
 
         while not self.game_over:
 
@@ -178,6 +181,9 @@ class othello(base):
 
 
                     position=event.pos
+
+
+
 
 
                     if(self.check_if_valid(position, self.Turn_id) > 0):
@@ -323,12 +329,23 @@ class othello(base):
     
     def update_board(self, Turn_id, position):
 
+        
+
         copied_board = self.board.copy()
 
         change = 0
         
         row=position[1]*self.m//self.size[1]+1
         column=position[0]*self.m//self.size[0]+1
+
+        if [row-1,column-1] in self.mine_coords: 
+            #print("mINE for", row, column )
+            if Turn_id == 1:
+                Turn_id = 2
+            else:
+                Turn_id = 1
+
+
 
         if Turn_id == 1:
             selff = 1
@@ -356,6 +373,8 @@ class othello(base):
                 for t in range(1,i):
                     self.board[row+t*v-1][column-1 +t*h] = selff
 
+        
+        self.board[row-1, column-1] = selff
 
     #updates the screen if a valid move is made and returns error if the board is already filled
     def Game(self, position, Turn_id):
